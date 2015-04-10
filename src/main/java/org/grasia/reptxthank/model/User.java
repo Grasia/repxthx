@@ -10,8 +10,8 @@ public class User {
 	private Date registration;
 	private ArrayList<Item> contributions;
 	private ArrayList<Item> grateFulContributions;
-	private long credit;
-	private long reputation;
+	private float credit;
+	private float reputation;
 	
 	public long getId() {
 		return id;
@@ -43,16 +43,16 @@ public class User {
 	public void setContributions(ArrayList<Item> contributions) {
 		this.contributions = contributions;
 	}
-	public long getCredit() {
+	public float getCredit() {
 		return credit;
 	}
-	public void setCredit(long credit) {
+	public void setCredit(float credit) {
 		this.credit = credit;
 	}
-	public long getReputation() {
+	public float getReputation() {
 		return reputation;
 	}
-	public void setReputation(long reputation) {
+	public void setReputation(float reputation) {
 		this.reputation = reputation;
 	}
 	public ArrayList<Item> getGrateFulContributions() {

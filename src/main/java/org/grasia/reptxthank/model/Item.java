@@ -6,7 +6,7 @@ import java.util.Date;
 public class Item {
 	private long id;
 	private Date creationDate;
-	private long quality;
+	private float quality;
 	
 	// Amount of people who thank for this item
 	private long thankful;
@@ -31,10 +31,10 @@ public class Item {
 	public void setContributors(ArrayList<User> contributors) {
 		this.contributors = contributors;
 	}
-	public long getQuality() {
+	public float getQuality() {
 		return quality;
 	}
-	public void setQuality(long quality) {
+	public void setQuality(float quality) {
 		this.quality = quality;
 	}
 	public long getThankful() {
