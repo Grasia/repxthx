@@ -30,6 +30,7 @@ public class RepCalculator {
 		// HashMap que refleja user-Lista de items hechos por dicho user
 		HashMap<Long, ArrayList<Long>> matrixP = repCalculator.buildMatrixP(users, matrixE);
 		System.out.println(matrixP.toString());
+		// HashMap que refleja el peso de la iteraccion que haya tenido un usuario con algún item
 		HashMap<Long, HashMap<Long, Long>> matrixW = repCalculator.buildMatrixW(users, matrixE, matrixP);
 		System.out.println(matrixW.toString());
 		

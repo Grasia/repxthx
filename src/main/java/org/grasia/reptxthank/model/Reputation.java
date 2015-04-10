@@ -6,15 +6,14 @@ import java.util.HashMap;
 public class Reputation {
 	// key de cada hashMap son los id, de los usuarios y luego items
 	// en ese orden.
-	// en qué momento se llenan estos datos?
+	// en quï¿½ momento se llenan estos datos?
 	// private HashMap<Long, HashMap<Long, Long>> matrixE;
 	private HashMap<Long, ArrayList<Item>> matrixE;
 	// matriz de autores por item
 	private HashMap<Long, ArrayList<User>> matrixP;
-	// matriz de pesos dependiendo del tipo de interacción
+	// matriz de pesos dependiendo del tipo de interacciï¿½n
 	private HashMap<Long, HashMap<Long, Long>> matrixW;
-	// Fitness corresponde a cada item. Se tiene en cuenta la totalidad de los items (TODOS)
-	private HashMap<Long, Long> fitness;
+	
 	
 	public HashMap<Long, ArrayList<Item>> getMatrixE() {
 		return matrixE;
@@ -33,12 +32,6 @@ public class Reputation {
 	}
 	public void setMatrixW(HashMap<Long, HashMap<Long, Long>> matrixW) {
 		this.matrixW = matrixW;
-	}
-	public HashMap<Long, Long> getFitness() {
-		return fitness;
-	}
-	public void setFitness(HashMap<Long, Long> fitness) {
-		this.fitness = fitness;
 	}
 	public ArrayList<Item> getItemsByUser(long userId){
 		return this.matrixE.get(userId);
