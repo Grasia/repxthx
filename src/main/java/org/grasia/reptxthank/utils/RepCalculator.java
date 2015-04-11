@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.Set;
 
 import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
@@ -32,18 +33,22 @@ public class RepCalculator {
 		// Matriz sin peso de relacion user-item. 
 		// Pueden estar tambien items agradecidos por user
 		// ArrayList será de ids de Item
-		HashMap<Long, ArrayList<Long>> matrixE = repCalculator.buildMatrixE(users, items);
-		System.out.println(matrixE.toString());
+		HashMap<Long, ArrayList<Long>> matrixEUsers = repCalculator.buildMatrixEUsers(users, items);
+		// HashMap itemId- List<userId>
+		HashMap<Long, ArrayList<Long>> matrixEItems = repCalculator.buildMatrixEItems(matrixEUsers);
+		
+		
+		System.out.println(matrixEUsers.toString());
 		// HashMap que refleja user-Lista de items hechos por dicho user
-		HashMap<Long, ArrayList<Long>> matrixP = repCalculator.buildMatrixP(users, matrixE);
+		HashMap<Long, ArrayList<Long>> matrixP = repCalculator.buildMatrixP(users, matrixEUsers);
 		System.out.println(matrixP.toString());
 		// HashMap que refleja el peso de la iteraccion que haya tenido un usuario con algún item
-		HashMap<Long, HashMap<Long, Long>> matrixW = repCalculator.buildMatrixW(users, matrixE, matrixP);
+		HashMap<Long, HashMap<Long, Long>> matrixW = repCalculator.buildMatrixW(users, matrixEUsers, matrixP);
 		System.out.println(matrixW.toString());
 		Reputation rep = new Reputation();
 		
 		rep.setItemsMap(itemsMap);
-		rep.setMatrixE(matrixE);
+		rep.setMatrixE(matrixEUsers);
 		rep.setMatrixP(matrixP);
 		rep.setMatrixW(matrixW);
 		rep.setUsersMap(usersMap);
@@ -57,6 +62,19 @@ public class RepCalculator {
 			i++;
 		}
 		
+	}
+
+	private HashMap<Long, ArrayList<Long>> buildMatrixEItems(
+			HashMap<Long, ArrayList<Long>> matrixEUsers) {
+		HashMap<Long, ArrayList<Long>> matrixEItems = new HashMap<Long, ArrayList<Long>>();
+		Set<Long> keys = matrixEUsers.keySet();
+		for(Long userId : keys){
+			ArrayList<Long> itemsByUser = matrixEUsers.get(userId);
+			for(Long itemId : itemsByUser){
+				
+			}
+		}
+		return matrixEItems;
 	}
 
 	private HashMap<Long, HashMap<Long, Long>> buildMatrixW(
@@ -115,7 +133,7 @@ public class RepCalculator {
 		return matrixP;
 	}
 
-	private HashMap<Long, ArrayList<Long>> buildMatrixE(ArrayList<User> users, ArrayList<Item> items){
+	private HashMap<Long, ArrayList<Long>> buildMatrixEUsers(ArrayList<User> users, ArrayList<Item> items){
 		HashMap<Long, ArrayList<Long>> matrixE = new HashMap<Long, ArrayList<Long>>();
 		Random random = new Random();
 		for(User user : users){
