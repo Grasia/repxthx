@@ -6,7 +6,7 @@ import org.grasia.reptxthank.model.User;
 
 public interface ReputationService {
 
-	public long reputXThank(long userId);
+	public float reputXThank(User user);
 	public ArrayList<User> reputXThank(ArrayList<User> users);
 
 }

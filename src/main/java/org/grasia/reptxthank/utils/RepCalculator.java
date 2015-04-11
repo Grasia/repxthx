@@ -6,9 +6,16 @@ import java.util.HashMap;
 import java.util.Random;
 
 import org.grasia.reptxthank.model.Item;
+import org.grasia.reptxthank.model.Reputation;
 import org.grasia.reptxthank.model.User;
+import org.grasia.reptxthank.service.credit.implementation.CreditServiceImpl;
+import org.grasia.reptxthank.service.reputation.ReputationService;
+import org.grasia.reptxthank.service.reputation.implementation.ReputationServiceImpl;
 
 public class RepCalculator {
+	
+	private int NUM_USERS = 9;
+	private int NUM_ITEMS = 5;
 	
 	public static void main(String[] args) {
 		RepCalculator repCalculator = new RepCalculator();
@@ -33,6 +40,22 @@ public class RepCalculator {
 		// HashMap que refleja el peso de la iteraccion que haya tenido un usuario con algún item
 		HashMap<Long, HashMap<Long, Long>> matrixW = repCalculator.buildMatrixW(users, matrixE, matrixP);
 		System.out.println(matrixW.toString());
+		Reputation rep = new Reputation();
+		
+		rep.setItemsMap(itemsMap);
+		rep.setMatrixE(matrixE);
+		rep.setMatrixP(matrixP);
+		rep.setMatrixW(matrixW);
+		rep.setUsersMap(usersMap);
+		int i = 0;
+		ReputationService repService = new ReputationServiceImpl(rep);
+		CreditServiceImpl creditService = new CreditServiceImpl(rep);
+		while (i < 3){
+			repService.reputXThank(users);
+			creditService.creditXThank(users);
+			System.out.println(users.toString());
+			i++;
+		}
 		
 	}
 
@@ -124,7 +147,7 @@ public class RepCalculator {
 
 	private ArrayList<Item> generateItems() {
 		ArrayList<Item> items = new ArrayList<Item>();
-		for(int i = 0; i < 5; i++){
+		for(int i = 0; i < NUM_ITEMS; i++){
 			Item item = new Item();
 			item.setId(i);
 			item.setCreationDate(new Date());
@@ -135,7 +158,7 @@ public class RepCalculator {
 
 	private ArrayList<User> generateUsers(){
 		ArrayList<User> users = new ArrayList<User>();
-		for(int i = 0; i < 16; i++){
+		for(int i = 0; i < NUM_USERS; i++){
 			User user = new User();
 			user.setId(i);
 			user.setName("user-"+i);

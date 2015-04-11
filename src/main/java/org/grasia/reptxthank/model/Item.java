@@ -49,4 +49,10 @@ public class Item {
 	public void setThankfulContributors(ArrayList<User> thankfulContributors) {
 		this.thankfulContributors = thankfulContributors;
 	}
+
+	@Override
+	public String toString(){
+		return "ItemId: "+id+" -Fitness: "+quality+"\n";
+		
+	}
 }
