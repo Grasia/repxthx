@@ -8,6 +8,7 @@ import java.util.Random;
 import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
 import org.grasia.reptxthank.model.User;
+import org.grasia.reptxthank.service.credit.implementation.CreditServiceImpl;
 import org.grasia.reptxthank.service.reputation.ReputationService;
 import org.grasia.reptxthank.service.reputation.implementation.ReputationServiceImpl;
 
@@ -47,8 +48,10 @@ public class RepCalculator {
 		rep.setUsersMap(usersMap);
 		int i = 0;
 		ReputationService repService = new ReputationServiceImpl(rep);
+		CreditServiceImpl creditService = new CreditServiceImpl(rep);
 		while (i < 3){
 			repService.reputXThank(users);
+			creditService.creditXThank(users);
 			System.out.println(users.toString());
 			i++;
 		}

@@ -6,7 +6,7 @@ import org.grasia.reptxthank.model.Item;
 
 public interface QualityService {
 
-	public long qualityXThank(long itemId);
+	public float qualityXThank(Item item);
 	public ArrayList<Item> qualityXThank(ArrayList<Item> items);
 
 }

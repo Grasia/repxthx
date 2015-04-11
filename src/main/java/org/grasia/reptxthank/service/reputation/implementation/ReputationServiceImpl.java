@@ -27,13 +27,13 @@ public class ReputationServiceImpl implements ReputationService {
 		float sum = 0;
 		ArrayList<Long> itemsByUser = reputation.getItemsByUser(user.getId());
 		HashMap<Long, HashMap<Long, Long>> matrixW = reputation.getMatrixW();
-		HashMap<Long, Item> fitnessMatrix = reputation.getItemsMap(); // hashmap de items key=itemId
+		HashMap<Long, Item> itemsMap = reputation.getItemsMap(); // hashmap de items key=itemId
 		numItemsByUser = itemsByUser.size();
-		float fitnessMedia = this.calcMediaFitness(fitnessMatrix);
+		float fitnessMedia = this.calcMediaFitness(itemsMap);
 		Iterator<Long> it = itemsByUser.iterator();
 		while(it.hasNext()){
 			long item = it.next();
-			float itemFitness = fitnessMatrix.get(item).getQuality();
+			float itemFitness = itemsMap.get(item).getQuality();
 			long wia = matrixW.get(user.getId()).get(item);
 			sum += wia*(itemFitness-(PF)*fitnessMedia);
 			// sum += wia*(itemFitness-fitnessMedia);
