@@ -13,27 +13,33 @@ import org.grasia.reptxthank.service.reputation.ReputationService;
 public class ReputationServiceImpl implements ReputationService {
 
 	private Reputation reputation;
+	
+	private double PF = 0.1;
+	
+	public ReputationServiceImpl(Reputation reputation) {
+		this.reputation = reputation;
+	}
 
 	@Override
-	public long reputXThank(long userId) {
-		long repxuser = 0;
-		long numItemsByUser = 0;
-		long sum = 0;
-		ArrayList<Item> itemsByUser = reputation.getItemsByUser(userId);
+	public float reputXThank(User user) {
+		float repxuser = 0;
+		float numItemsByUser = 0;
+		float sum = 0;
+		ArrayList<Long> itemsByUser = reputation.getItemsByUser(user.getId());
 		HashMap<Long, HashMap<Long, Long>> matrixW = reputation.getMatrixW();
-		HashMap<Long, Long> fitnessMatrix = reputation.getFitness();
+		HashMap<Long, Item> fitnessMatrix = reputation.getItemsMap(); // hashmap de items key=itemId
 		numItemsByUser = itemsByUser.size();
-		long fitnessMedia = this.calcMediaFitness(fitnessMatrix);
-		Iterator<Item> it = itemsByUser.iterator();
+		float fitnessMedia = this.calcMediaFitness(fitnessMatrix);
+		Iterator<Long> it = itemsByUser.iterator();
 		while(it.hasNext()){
-			Item item = it.next();
-			long itemFitness = fitnessMatrix.get(item.getId());
-			long wia = matrixW.get(userId).get(item.getId());
-			// sum += wia*(itemFitness-(pf)*fitnessMedia);
-			sum += wia*(itemFitness-fitnessMedia);
+			long item = it.next();
+			float itemFitness = fitnessMatrix.get(item).getQuality();
+			long wia = matrixW.get(user.getId()).get(item);
+			sum += wia*(itemFitness-(PF)*fitnessMedia);
+			// sum += wia*(itemFitness-fitnessMedia);
 		}
 		// repxuser = (1/(numItemsByUser^(or)))*sum;
-		repxuser = (1/(numItemsByUser))*sum;
+		repxuser = numItemsByUser == 0 ? user.getReputation() : (1/(numItemsByUser))*sum;
 		return repxuser;
 	}
 
@@ -43,21 +49,21 @@ public class ReputationServiceImpl implements ReputationService {
 		ArrayList<User> reputatedUsers = new ArrayList<User>();
 		while (it.hasNext()){
 			User user = it.next();
-			user.setReputation(this.reputXThank(user.getId()));
+			user.setReputation(this.reputXThank(user));
 		}
 		return reputatedUsers;
 	}
 
-	private long calcMediaFitness(HashMap<Long, Long> matrixF){
-		long media = 0;
-		long totalItems = 0;
-		long totalFitness = 0;
-		Set<Long> keys = matrixF.keySet();
+	private float calcMediaFitness(HashMap<Long, Item> fitnessMatrix){
+		float media = 0;
+		float totalItems = 0;
+		float totalFitness = 0;
+		Set<Long> keys = fitnessMatrix.keySet();
 		totalItems = keys.size();
 		Iterator<Long> it = keys.iterator();
 		while(it.hasNext()){
 			long key = it.next();
-			totalFitness += matrixF.get(key);
+			totalFitness += fitnessMatrix.get(key).getQuality();
 		}
 		media = (totalFitness/totalItems);
 		return media;

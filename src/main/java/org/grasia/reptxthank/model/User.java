@@ -62,4 +62,9 @@ public class User {
 		this.grateFulContributions = grateFulContributions;
 	}
 	
+	@Override
+	public String toString(){
+		return "UserId: "+id+" -Credit: "+credit+" -Reputation: "+reputation+"\n";
+	}
+	
 }
