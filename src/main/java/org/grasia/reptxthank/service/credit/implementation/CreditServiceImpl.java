@@ -3,7 +3,6 @@ package org.grasia.reptxthank.service.credit.implementation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Set;
 
 import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
@@ -25,14 +24,13 @@ public class CreditServiceImpl implements CreditService{
 		float creditXUser = 0;
 		float numItemsByUser = 0;
 		float sum = 0;
-		HashMap<Long, ArrayList<Long>> matrixP = reputation.getMatrixP();
+		HashMap<Long, ArrayList<Long>> matrixP = reputation.getMatrixPUsers();
 		ArrayList<Long> itemsLinkedToUser = reputation.getItemsByUser(user.getId());
 		ArrayList<Long> itemsAuthByUser = matrixP.get(user.getId());
-		HashMap<Long, User> usersMap = reputation.getUsersMap();
 		HashMap<Long, Item> itemsMap = reputation.getItemsMap();
 		
 		numItemsByUser = itemsAuthByUser.size();
-		float creditMedia = this.calcMediaCredit(usersMap);
+		float creditMedia = reputation.getAvgCredit();
 		Iterator<Long> it = itemsLinkedToUser.iterator();
 		while(it.hasNext()){
 			long itemId = it.next();
@@ -55,22 +53,5 @@ public class CreditServiceImpl implements CreditService{
 		}
 		return reputatedUsers;
 	}
-	
-
-	private float calcMediaCredit(HashMap<Long, User> mapUser){
-		float media = 0;
-		float totalUsers = 0;
-		float totalCredit = 0;
-		Set<Long> keys = mapUser.keySet();
-		totalUsers = keys.size();
-		Iterator<Long> it = keys.iterator();
-		while(it.hasNext()){
-			long key = it.next();
-			totalCredit += mapUser.get(key).getCredit();
-		}
-		media = (totalCredit/totalUsers);
-		return media;
-	}
-
 
 }
