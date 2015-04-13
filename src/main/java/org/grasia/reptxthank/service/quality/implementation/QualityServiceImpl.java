@@ -48,12 +48,14 @@ public class QualityServiceImpl implements QualityService{
 	}
 
 	@Override
-	public ArrayList<Item> qualityXThank(ArrayList<Item> items) {
+	public HashMap<Long, Float> qualityXThank(ArrayList<Item> items) {
 		Iterator<Item> it = items.iterator();
-		ArrayList<Item> qualifiedItems = new ArrayList<Item>();
+//		ArrayList<Item> qualifiedItems = new ArrayList<Item>();
+		HashMap<Long, Float> qualifiedItems = new HashMap<Long, Float>();
 		while (it.hasNext()){
 			Item item = it.next();
-			item.setQuality(this.qualityXThank(item));
+//			item.setQuality(this.qualityXThank(item));
+			qualifiedItems.put(item.getId(), this.qualityXThank(item));
 		}
 		return qualifiedItems;
 	}

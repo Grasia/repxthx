@@ -79,12 +79,20 @@ public class RepCalculator {
 		CreditService creditService = new CreditServiceImpl(rep);
 		QualityService qualityService = new QualityServiceImpl(rep);
 		
+		System.out.println(users.toString());
+		System.out.println(items.toString());
+		
 		System.out.println("################################################");
 		
 		while (i < ITERACTIONS){
-			repService.reputXThank(users);
-			creditService.creditXThank(users);
-			qualityService.qualityXThank(items);
+			
+			
+			HashMap<Long, Float> reputation = repService.reputXThank(users);
+			HashMap<Long, Float> credit = creditService.creditXThank(users);
+			HashMap<Long, Float> quality = qualityService.qualityXThank(items);
+			
+			rep.updateUsersValues(reputation, credit);
+			rep.updateItemsValues(quality);
 			System.out.println(users.toString());
 			System.out.println(items.toString());
 			System.out.println("################################################");

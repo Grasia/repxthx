@@ -124,4 +124,21 @@ public class Reputation {
 		media = (totalRep/totalUsers);
 		return media;
 	}
+	public void updateUsersValues(HashMap<Long, Float> reputation,
+			HashMap<Long, Float> credit) {
+		Set<Long> usersKeys = this.usersMap.keySet();
+		for(Long key : usersKeys){
+			User user = this.usersMap.get(key);
+			user.setReputation(reputation.get(key));
+			user.setCredit(credit.get(key));
+		}
+	}
+	public void updateItemsValues(HashMap<Long, Float> quality) {
+		Set<Long> itemsKeys = this.itemsMap.keySet();
+		for(Long key : itemsKeys){
+			Item item = this.itemsMap.get(key);
+			item.setQuality(quality.get(key));
+		}
+		
+	}
 }

@@ -42,12 +42,14 @@ public class ReputationServiceImpl implements ReputationService {
 	}
 
 	@Override
-	public ArrayList<User> reputXThank(ArrayList<User> users) {
+	public HashMap<Long, Float> reputXThank(ArrayList<User> users) {
 		Iterator<User> it = users.iterator();
-		ArrayList<User> reputatedUsers = new ArrayList<User>();
+//		ArrayList<User> reputatedUsers = new ArrayList<User>();
+		HashMap<Long, Float> reputatedUsers = new HashMap<Long, Float>();
 		while (it.hasNext()){
 			User user = it.next();
-			user.setReputation(this.reputXThank(user));
+//			user.setReputation(this.reputXThank(user));
+			reputatedUsers.put(user.getId(), this.reputXThank(user));
 		}
 		return reputatedUsers;
 	}

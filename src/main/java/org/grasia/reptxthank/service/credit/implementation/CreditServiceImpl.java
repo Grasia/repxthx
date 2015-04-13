@@ -44,12 +44,14 @@ public class CreditServiceImpl implements CreditService{
 	}
 
 	@Override
-	public ArrayList<User> creditXThank(ArrayList<User> users) {
+	public HashMap<Long, Float> creditXThank(ArrayList<User> users) {
 		Iterator<User> it = users.iterator();
-		ArrayList<User> reputatedUsers = new ArrayList<User>();
+//		ArrayList<User> reputatedUsers = new ArrayList<User>();
+		HashMap<Long, Float> reputatedUsers = new HashMap<Long, Float>();
 		while (it.hasNext()){
 			User user = it.next();
-			user.setCredit(this.creditXThank(user));
+//			user.setCredit(this.creditXThank(user));
+			reputatedUsers.put(user.getId(), this.creditXThank(user));
 		}
 		return reputatedUsers;
 	}
