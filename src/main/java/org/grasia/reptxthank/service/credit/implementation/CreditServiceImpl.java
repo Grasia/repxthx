@@ -3,6 +3,7 @@ package org.grasia.reptxthank.service.credit.implementation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
@@ -43,17 +44,38 @@ public class CreditServiceImpl implements CreditService{
 		return creditXUser;
 	}
 
+	
 	@Override
 	public HashMap<Long, Float> creditXThank(ArrayList<User> users) {
 		Iterator<User> it = users.iterator();
 //		ArrayList<User> reputatedUsers = new ArrayList<User>();
 		HashMap<Long, Float> reputatedUsers = new HashMap<Long, Float>();
+		float minCredit = Float.MAX_VALUE , maxCredit = 0;
 		while (it.hasNext()){
 			User user = it.next();
+			float credit = this.creditXThank(user);
+			
+			maxCredit = maxCredit < credit ? credit : maxCredit;
+			minCredit = minCredit > credit ? credit : minCredit;
 //			user.setCredit(this.creditXThank(user));
-			reputatedUsers.put(user.getId(), this.creditXThank(user));
+			reputatedUsers.put(user.getId(), credit);
 		}
+		normalize(reputatedUsers,minCredit,maxCredit);
 		return reputatedUsers;
+	}
+	
+	private void normalize(HashMap<Long, Float> reputatedUsers, float minValue, float maxValue){
+		 Iterator<Entry<Long, Float>> it = reputatedUsers.entrySet().iterator();
+		    while (it.hasNext()) {
+		    	HashMap.Entry<Long, Float> pair = it.next();
+		        float value= pair.getValue(), normalizedFitness;
+		       
+		        normalizedFitness = (value - minValue) / (maxValue - minValue);
+		        
+		        pair.setValue(normalizedFitness);
+
+		    }
+		
 	}
 
 }

@@ -3,6 +3,7 @@ package org.grasia.reptxthank.service.quality.implementation;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
 
 import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
@@ -52,12 +53,36 @@ public class QualityServiceImpl implements QualityService{
 		Iterator<Item> it = items.iterator();
 //		ArrayList<Item> qualifiedItems = new ArrayList<Item>();
 		HashMap<Long, Float> qualifiedItems = new HashMap<Long, Float>();
+		
+		float minFitness = Float.MAX_VALUE , maxFitness = 0;
 		while (it.hasNext()){
 			Item item = it.next();
+			float fitness = this.qualityXThank(item);
+			
+			maxFitness = maxFitness < fitness ? fitness : maxFitness;
+			minFitness = minFitness > fitness ? fitness : minFitness;
+			
 //			item.setQuality(this.qualityXThank(item));
-			qualifiedItems.put(item.getId(), this.qualityXThank(item));
+			
+			qualifiedItems.put(item.getId(), fitness);
 		}
+		
+		normalize(qualifiedItems,minFitness,maxFitness);
 		return qualifiedItems;
+	}
+	
+	private void normalize(HashMap<Long, Float> qualifiedItems, float minValue, float maxValue){
+		 Iterator<Entry<Long, Float>> it = qualifiedItems.entrySet().iterator();
+		    while (it.hasNext()) {
+		    	HashMap.Entry<Long, Float> pair = it.next();
+		        float value= pair.getValue(), normalizedFitness;
+
+		        normalizedFitness = (value - minValue) / (maxValue - minValue);
+		        
+		        pair.setValue(normalizedFitness);
+		       
+		    }
+		
 	}
 
 	private float calcSumRep(HashMap<Long, User> usersMap,
