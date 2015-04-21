@@ -51,7 +51,7 @@ public class ReputationServiceImpl implements ReputationService {
 			float maxValue) {
 		Iterator<Entry<Long, Float>> it = reputatedUSers.entrySet().iterator();
 		while (it.hasNext()) {
-			HashMap.Entry<Long, Float> pair = it.next();
+			Entry<Long, Float> pair = it.next();
 			float value = pair.getValue(), normalizedFitness;
 
 			normalizedFitness = (value - minValue)/ (maxValue - minValue);

@@ -74,7 +74,7 @@ public class QualityServiceImpl implements QualityService{
 	private void normalize(HashMap<Long, Float> qualifiedItems, float minValue, float maxValue){
 		 Iterator<Entry<Long, Float>> it = qualifiedItems.entrySet().iterator();
 		    while (it.hasNext()) {
-		    	HashMap.Entry<Long, Float> pair = it.next();
+		    	Entry<Long, Float> pair = it.next();
 		        float value= pair.getValue(), normalizedFitness;
 
 		        normalizedFitness = (value - minValue) / (maxValue - minValue);

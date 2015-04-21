@@ -67,7 +67,7 @@ public class CreditServiceImpl implements CreditService{
 	private void normalize(HashMap<Long, Float> reputatedUsers, float minValue, float maxValue){
 		 Iterator<Entry<Long, Float>> it = reputatedUsers.entrySet().iterator();
 		    while (it.hasNext()) {
-		    	HashMap.Entry<Long, Float> pair = it.next();
+		    	Entry<Long, Float> pair = it.next();
 		        float value= pair.getValue(), normalizedFitness;
 		       
 		        normalizedFitness = (value - minValue) / (maxValue - minValue);
