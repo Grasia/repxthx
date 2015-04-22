@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.grasia.reptxthank.dao.item.ItemDao;
 import org.grasia.reptxthank.model.Item;
+import org.springframework.stereotype.Repository;
 
+@Repository("itemDao")
 public class ItemDaoImpl implements ItemDao {
 
 	@Override
