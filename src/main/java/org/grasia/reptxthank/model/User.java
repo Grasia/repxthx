@@ -75,10 +75,6 @@ public class User {
 		this.grateFulContributions = grateFulContributions;
 	}
 	
-	@Override
-	public String toString(){
-		return "UserId: "+id+" -Credit: "+credit+" -Reputation: "+reputation+"\n";
-	}
 	public String getWiki_userId() {
 		return wiki_userId;
 	}
@@ -92,4 +88,9 @@ public class User {
 		this.email = email;
 	}
 	
+	@Override
+	public String toString(){
+		// return "UserId: "+id+" -Credit: "+credit+" -Reputation: "+reputation+"\n";
+		return "UserId: "+id+"; Name: "+name+"; Alias: "+wiki_userId;
+	}
 }

@@ -1,16 +1,27 @@
 package org.grasia.reptxthank.dao.user.implementation;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 import org.grasia.reptxthank.dao.user.UserDao;
 import org.grasia.reptxthank.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
-	JdbcTemplate dataSource;
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	private String qry0 = "SELECT pk_userId as id,"
+			+ " user_name as name,"
+			+ " wiki_userId as alias,"
+			+ " email as email,"
+			+ " FROM USER";
+	
 	@Override
 	public User getUser(long id) {
 		// TODO Auto-generated method stub
@@ -19,8 +30,8 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> users = jdbcTemplate.query(qry0, new UserMapper());
+		return users;
 	}
 
 	@Override
@@ -35,4 +46,16 @@ public class UserDaoImpl implements UserDao {
 		
 	}
 
+	private static final class UserMapper implements RowMapper<User> {
+		
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+        	User user = new User();
+        	user.setId(rs.getLong("id"));
+        	user.setName(rs.getString("name"));
+        	user.setName(rs.getString("alias"));
+        	user.setName(rs.getString("email"));
+            return user;
+        }
+    }
+	
 }
