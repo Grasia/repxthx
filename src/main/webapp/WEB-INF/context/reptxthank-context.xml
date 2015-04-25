@@ -32,15 +32,24 @@
 	============================================================================ 
 	-->
 
-	<context:property-placeholder
-		properties-ref="defaultValues" location="file:${REPXTHXHOME}/conf/repxthx.properties" />
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+	    <property name="locations">
+	        <value>classpath:repxthx.properties</value>
+	    </property>
+	</bean>
 
 	<!-- 
 	============================================================================ 
 		Database Configuration 
 	============================================================================ 
 	-->
-
+	<bean name="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+	</bean>
 	
 
 	<!--
