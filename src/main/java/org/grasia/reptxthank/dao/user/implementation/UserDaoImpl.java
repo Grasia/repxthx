@@ -36,16 +36,23 @@ public class UserDaoImpl implements UserDao {
 		return users;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addUser(User user) {
-		// TODO Auto-generated method stub
-		
+	public long addUser(User user) {
+		String qry = "INSERT INTO USER(user_name, wiki_userId, email) values (? , ?) RETURNING pk_userId";
+		long id = jdbcTemplate.queryForLong(qry, 
+				user.getName(),
+				user.getWiki_userId(),
+				user.getEmail());
+		return id;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void updateUser(User user) {
-		// TODO Auto-generated method stub
-		
+	public boolean updateUser(User user) {
+		String qry = "UPDATE USER SET user_name = ?, wiki_userId = ? WHERE pk_itemId = ?";
+		int rowsModified = jdbcTemplate.queryForInt(qry, new Object[]{user.getName(), user.getWiki_userId(), user.getId()});
+		return rowsModified != 0 ? true : false;
 	}
 
 	private static final class UserMapper implements RowMapper<User> {

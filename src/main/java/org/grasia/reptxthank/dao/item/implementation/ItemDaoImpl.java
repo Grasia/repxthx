@@ -19,12 +19,14 @@ public class ItemDaoImpl implements ItemDao {
 	
 	private String qry0 = "SELECT pk_itemId,"
 			+ " item_type"
-			+ " FROM USER";
+			+ " FROM ITEM";
 	
 	@Override
 	public Item getItem(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Item> items = null;
+		String qryAux = qry0 + " WHERE pk_itemId = ?";
+		items = jdbcTemplate.query(qryAux, new Object[]{id}, new ItemMapper());
+		return items.size() > 0 ? items.get(0) : null;
 	}
 
 	@Override
@@ -33,16 +35,22 @@ public class ItemDaoImpl implements ItemDao {
 		return items;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void addItem(Item item) {
-		// TODO Auto-generated method stub
-		
+	public long addItem(Item item) {
+		String qry = "INSERT INTO ITEM(item_type, quality) values (? , ?) RETURNING pk_itemId";
+		long id = jdbcTemplate.queryForLong(qry, 
+				item.getType(),
+				item.getQuality());
+		return id;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public void updateItem(Item item) {
-		// TODO Auto-generated method stub
-		
+	public boolean updateItem(Item item) {
+		String qry = "UPDATE ITEM SET quality = ? WHERE pk_itemId = ?";
+		int rowsModified = jdbcTemplate.queryForInt(qry, new Object[]{item.getQuality(), item.getId()});
+		return rowsModified != 0 ? true : false;
 	}
 
 	private static final class ItemMapper implements RowMapper<Item> {

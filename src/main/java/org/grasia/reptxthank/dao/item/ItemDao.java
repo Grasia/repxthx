@@ -8,7 +8,7 @@ public interface ItemDao {
 	
 	public Item getItem(long id);
 	public List<Item> getAllItems();
-	public void addItem(Item item);
-	public void updateItem(Item item);
+	public long addItem(Item item);
+	public boolean updateItem(Item item);
 
 }
