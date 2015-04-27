@@ -10,16 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
-	private String qry0 = "SELECT pk_userId as id,"
-			+ " user_name as name,"
-			+ " wiki_userId as alias,"
-			+ " email as email,"
+	private String qry0 = "SELECT pk_userId,"
+			+ " user_name,"
+			+ " wiki_userId,"
+			+ " email"
 			+ " FROM USER";
 	
 	@Override
@@ -50,10 +52,9 @@ public class UserDaoImpl implements UserDao {
 		
         public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         	User user = new User();
-        	user.setId(rs.getLong("id"));
-        	user.setName(rs.getString("name"));
-        	user.setName(rs.getString("alias"));
-        	user.setName(rs.getString("email"));
+        	user.setId(rs.getLong("pk_userId"));
+        	user.setName(rs.getString("user_name"));
+        	user.setEmail(rs.getString("email"));
             return user;
         }
     }

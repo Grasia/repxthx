@@ -11,9 +11,7 @@ import org.grasia.reptxthank.model.Reputation;
 import org.grasia.reptxthank.model.User;
 import org.grasia.reptxthank.service.reputation.ReputationService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-@Service("repService")
 public class ReputationServiceImpl implements ReputationService {
 
 	@Autowired

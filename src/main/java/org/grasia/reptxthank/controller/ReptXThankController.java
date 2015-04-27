@@ -1,7 +1,9 @@
 package org.grasia.reptxthank.controller;
 
+import java.util.List;
+
+import org.grasia.reptxthank.model.User;
 import org.grasia.reptxthank.service.repxthx.RepxThxService;
-import org.json.simple.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -16,8 +18,8 @@ public class ReptXThankController {
 	
 	@RequestMapping("/welcome")
 	public String sayHello(ModelMap model){
-		JSONArray users = (JSONArray) repxthxService.getAllUsers();
-		model.addAttribute("message", "ReptXThank users");
+		List<User> users = repxthxService.getAllUsers();
+		model.addAttribute("message", "ReptXThank users: "+users.toString());
 		return "welcome";
 	}
 	

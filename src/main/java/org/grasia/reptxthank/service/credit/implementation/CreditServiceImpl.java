@@ -9,9 +9,7 @@ import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
 import org.grasia.reptxthank.model.User;
 import org.grasia.reptxthank.service.credit.CreditService;
-import org.springframework.stereotype.Service;
 
-@Service("creService")
 public class CreditServiceImpl implements CreditService{
 	
 	private Reputation reputation;

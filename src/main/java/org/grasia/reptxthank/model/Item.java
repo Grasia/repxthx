@@ -5,6 +5,7 @@ import java.util.Date;
 
 public class Item {
 	private long id;
+	private String type;
 	private Date creationDate;
 	private float quality;
 	
@@ -50,9 +51,17 @@ public class Item {
 		this.thankfulContributors = thankfulContributors;
 	}
 
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	
 	@Override
 	public String toString(){
 		return "ItemId: "+id+" -Fitness: "+quality+"\n";
 		
 	}
+
 }

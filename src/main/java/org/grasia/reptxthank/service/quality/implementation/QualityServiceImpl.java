@@ -9,9 +9,7 @@ import org.grasia.reptxthank.model.Item;
 import org.grasia.reptxthank.model.Reputation;
 import org.grasia.reptxthank.model.User;
 import org.grasia.reptxthank.service.quality.QualityService;
-import org.springframework.stereotype.Service;
 
-@Service("quaService")
 public class QualityServiceImpl implements QualityService{
 	
 	private Reputation reputation;
