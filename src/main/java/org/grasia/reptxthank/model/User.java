@@ -1,7 +1,5 @@
 package org.grasia.reptxthank.model;
 
-import java.util.ArrayList;
-import java.util.Date;
 /*
  * 
  * CREATE TABLE IF NOT EXISTS `USER` (
@@ -17,12 +15,6 @@ import java.util.Date;
 public class User {
 	private long id;
 	private String name;
-	private String wiki_userId;
-	private String email;
-	private long editCount;
-	private Date registration;
-	private ArrayList<Item> contributions;
-	private ArrayList<Item> grateFulContributions;
 	private float credit;
 	private float reputation;
 	
@@ -38,24 +30,6 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public long getEditCount() {
-		return editCount;
-	}
-	public void setEditCount(long editCount) {
-		this.editCount = editCount;
-	}
-	public Date getRegistration() {
-		return registration;
-	}
-	public void setRegistration(Date registration) {
-		this.registration = registration;
-	}
-	public ArrayList<Item> getContributions() {
-		return contributions;
-	}
-	public void setContributions(ArrayList<Item> contributions) {
-		this.contributions = contributions;
-	}
 	public float getCredit() {
 		return credit;
 	}
@@ -68,29 +42,9 @@ public class User {
 	public void setReputation(float reputation) {
 		this.reputation = reputation;
 	}
-	public ArrayList<Item> getGrateFulContributions() {
-		return grateFulContributions;
-	}
-	public void setGrateFulContributions(ArrayList<Item> grateFulContributions) {
-		this.grateFulContributions = grateFulContributions;
-	}
-	
-	public String getWiki_userId() {
-		return wiki_userId;
-	}
-	public void setWiki_userId(String wiki_userId) {
-		this.wiki_userId = wiki_userId;
-	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
 	@Override
 	public String toString(){
 		// return "UserId: "+id+" -Credit: "+credit+" -Reputation: "+reputation+"\n";
-		return "UserId: "+id+"; Name: "+name+"; Alias: "+wiki_userId;
+		return "UserId: "+id+"; Name: "+name;
 	}
 }

@@ -20,8 +20,8 @@ public class UserDaoImpl implements UserDao {
 	
 	private String qry0 = "SELECT pk_userId,"
 			+ " user_name,"
-			+ " wiki_userId,"
-			+ " email"
+			+ " credit,"
+			+ " reputation"
 			+ " FROM USER";
 	
 	@Override
@@ -39,19 +39,27 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("deprecation")
 	@Override
 	public long addUser(User user) {
-		String qry = "INSERT INTO USER(user_name, wiki_userId, email) values (? , ?) RETURNING pk_userId";
+		String qry = "INSERT INTO USER(user_name, reputation, credit) values (? , ?, ?) RETURNING pk_userId";
 		long id = jdbcTemplate.queryForLong(qry, 
 				user.getName(),
-				user.getWiki_userId(),
-				user.getEmail());
+				user.getReputation(),
+				user.getCredit());
 		return id;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean updateUser(User user) {
-		String qry = "UPDATE USER SET user_name = ?, wiki_userId = ? WHERE pk_itemId = ?";
-		int rowsModified = jdbcTemplate.queryForInt(qry, new Object[]{user.getName(), user.getWiki_userId(), user.getId()});
+		String qry = "UPDATE USER SET"
+				+ " user_name = ?,"
+				+ " reputation = ?,"
+				+ " credit = ?"
+				+ " WHERE pk_itemId = ?";
+		int rowsModified = jdbcTemplate.queryForInt(qry, new Object[]{
+				user.getName(), 
+				user.getReputation(), 
+				user.getCredit(),
+				user.getId()});
 		return rowsModified != 0 ? true : false;
 	}
 
@@ -61,7 +69,8 @@ public class UserDaoImpl implements UserDao {
         	User user = new User();
         	user.setId(rs.getLong("pk_userId"));
         	user.setName(rs.getString("user_name"));
-        	user.setEmail(rs.getString("email"));
+        	user.setReputation(rs.getFloat("reputation"));
+            user.setCredit(rs.getFloat("credit"));
             return user;
         }
     }

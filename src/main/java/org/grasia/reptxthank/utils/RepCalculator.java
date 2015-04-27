@@ -1,7 +1,6 @@
 package org.grasia.reptxthank.utils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
@@ -235,7 +234,6 @@ public class RepCalculator {
 		for(int i = 0; i < NUM_ITEMS; i++){
 			Item item = new Item();
 			item.setId(i);
-			item.setCreationDate(new Date());
 			items.add(item);
 		}
 		return items;
@@ -247,7 +245,6 @@ public class RepCalculator {
 			User user = new User();
 			user.setId(i);
 			user.setName("user-"+i);
-			user.setRegistration(new Date());
 			users.add(user);
 		}
 		return users;

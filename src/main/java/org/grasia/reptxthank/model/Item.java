@@ -1,18 +1,11 @@
 package org.grasia.reptxthank.model;
 
-import java.util.ArrayList;
-import java.util.Date;
 
 public class Item {
 	private long id;
 	private String type;
-	private Date creationDate;
+	private String title;
 	private float quality;
-	
-	// Amount of people who thank for this item
-	private long thankful;
-	private ArrayList<User> contributors;
-	private ArrayList<User> thankfulContributors;
 	
 	public long getId() {
 		return id;
@@ -20,37 +13,12 @@ public class Item {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Date getCreationDate() {
-		return creationDate;
-	}
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-	public ArrayList<User> getContributors() {
-		return contributors;
-	}
-	public void setContributors(ArrayList<User> contributors) {
-		this.contributors = contributors;
-	}
 	public float getQuality() {
 		return quality;
 	}
 	public void setQuality(float quality) {
 		this.quality = quality;
 	}
-	public long getThankful() {
-		return thankful;
-	}
-	public void setThankful(long thankful) {
-		this.thankful = thankful;
-	}
-	public ArrayList<User> getThankfulContributors() {
-		return thankfulContributors;
-	}
-	public void setThankfulContributors(ArrayList<User> thankfulContributors) {
-		this.thankfulContributors = thankfulContributors;
-	}
-
 	public String getType() {
 		return type;
 	}
@@ -58,6 +26,12 @@ public class Item {
 		this.type = type;
 	}
 	
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
 	@Override
 	public String toString(){
 		return "ItemId: "+id+" -Fitness: "+quality+"\n";
