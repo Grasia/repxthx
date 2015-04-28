@@ -18,6 +18,13 @@ public class User {
 	private float credit;
 	private float reputation;
 	
+	public User(){}
+	
+	public User(long id, String name){
+		this.id = id;
+		this.name = name;
+	}
+	
 	public long getId() {
 		return id;
 	}

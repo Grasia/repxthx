@@ -22,7 +22,7 @@ public class HttpClientExample {
 
     private void sendGet() throws Exception {
  
-        String url = "http://en.wikipedia.org/w/api.php?action=query&list=allusers&format=json&aulimit=100";
+        String url = "http://en.wikipedia.org/w/api.php?action=query&list=allusers&format=json&aulimit=500";
  
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet request = new HttpGet(url);

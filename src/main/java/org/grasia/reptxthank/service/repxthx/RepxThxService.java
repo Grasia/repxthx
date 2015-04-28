@@ -7,4 +7,6 @@ import org.grasia.reptxthank.model.User;
 public interface RepxThxService {
 	
 	List<User> getAllUsers();
+	
+	void launchThread();
 }

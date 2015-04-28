@@ -17,6 +17,12 @@
 	<context:component-scan base-package="org.grasia.reptxthank.*" />
 	<context:annotation-config />
 	<mvc:annotation-driven />
+	
+	<!-- 
+	============================================================================ 
+		View Resolver Configuration 
+	============================================================================ 
+	-->
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

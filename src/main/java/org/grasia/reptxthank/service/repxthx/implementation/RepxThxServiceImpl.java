@@ -21,6 +21,12 @@ public class RepxThxServiceImpl implements RepxThxService {
 		List<User> users = userDao.getAllUsers();
 		return users;
 	}
+
+	@Override
+	public void launchThread() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
