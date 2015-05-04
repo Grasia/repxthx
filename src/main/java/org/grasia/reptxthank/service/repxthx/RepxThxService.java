@@ -8,5 +8,7 @@ public interface RepxThxService {
 	
 	List<User> getAllUsers();
 	
+	void addUsersList(List<User> users);
+	
 	void launchThread();
 }

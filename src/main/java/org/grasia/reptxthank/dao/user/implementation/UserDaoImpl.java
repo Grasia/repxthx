@@ -39,11 +39,9 @@ public class UserDaoImpl implements UserDao {
 	@SuppressWarnings("deprecation")
 	@Override
 	public long addUser(User user) {
-		String qry = "INSERT INTO USER(user_name, reputation, credit) values (? , ?, ?) RETURNING pk_userId";
+		String qry = "INSERT INTO USER(user_name) values (?) RETURNING pk_userId";
 		long id = jdbcTemplate.queryForLong(qry, 
-				user.getName(),
-				user.getReputation(),
-				user.getCredit());
+				user.getName());
 		return id;
 	}
 

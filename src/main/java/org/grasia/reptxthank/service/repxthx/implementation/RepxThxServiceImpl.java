@@ -27,6 +27,13 @@ public class RepxThxServiceImpl implements RepxThxService {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void addUsersList(List<User> users) {
+		for(User user : users){
+			userDao.addUser(user);
+		}
+	}
 	
 	
 	

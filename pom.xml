@@ -12,6 +12,7 @@
 		<spring.version>4.1.5.RELEASE</spring.version>
 		<org.json.version>20141113</org.json.version>
 		<httpclient.version>4.1.1</httpclient.version>
+		<gson.vesion>2.3.1</gson.vesion>
 	</properties>
 
 	<dependencies>
@@ -106,6 +107,13 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.34</version>
 		</dependency>
+
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>${gson.vesion}</version>
+		</dependency>
+
 
 	</dependencies>
 

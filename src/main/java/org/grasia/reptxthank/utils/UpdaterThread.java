@@ -2,51 +2,88 @@ package org.grasia.reptxthank.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.grasia.reptxthank.dao.user.UserDao;
+import org.grasia.reptxthank.model.User;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+
+import com.google.gson.Gson;
 
 
 public class UpdaterThread extends Thread{
 
 	@Value("${updater.thread.sleeptime}")
-	private long sleeptime;
+	private long SLEEPTIME;
+	
+	@Value("${update.url.base}")
+	private String URL_BASE;
+	
+	@Value("${update.url.query.users.prefix}")
+	private String QUERY_PREFIX;
+	
+	@Value("${update.url.query.users.param}")
+	private String QUERY_PARAM;
+
+	@Autowired
+	private UserDao userDao;
 	
 	private Logger LOGGER = LoggerFactory.getLogger(UpdaterThread.class);
 	
 	public void run(){
 		LOGGER.info("Thread launched");
-		// while(true)
+		try {
+			sendGet();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
-	// HTTP GET request
+	private List<User> getUsersList(JSONArray users) {
+		LOGGER.debug("Building a list of users");
+		ArrayList<User> userList = new ArrayList<User>();
+        Gson gson = new Gson();
+		for(Object user : users){
+			userList.add(gson.fromJson(((JSONObject)user).toJSONString(), User.class));
+		}
+		return userList;
+	}
+
+	private void saveAllUsers(List<User> users){
+		for(User user : users){
+			userDao.addUser(user);
+		}
+	}
+	
     private void sendGet() throws Exception {
  
-        String url = "http://en.wikipedia.org/w/api.php?action=query&list=allusers&format=json&aulimit=100";
- 
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpGet request = new HttpGet(url);
-        String aufrom;
-        HttpResponse response;
- 
+    	String url = this.URL_BASE + this.QUERY_PREFIX;
+		HttpClient client = HttpClientBuilder.create().build();
+        JSONParser parser = new JSONParser();
+        HttpResponse response = null;
+        String aufrom = "";
         do {
+        	HttpGet request = new HttpGet(url);
             response = client.execute(request);
- 
-            BufferedReader rd = new BufferedReader(new InputStreamReader(
-                    response.getEntity().getContent()));
- 
-            JsonParser jsonParser = new JsonParser();
-            aufrom = jsonParser.parse(rd).getAsJsonObject()
-                    .get("query-continue").getAsJsonObject().get("allusers")
-                    .getAsJsonObject().get("aufrom").getAsString();
- 
-        } while (response.getStatusLine().getStatusCode() == 200
-                && !aufrom.isEmpty());
- 
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            JSONObject objResponse = (JSONObject) parser.parse(rd);
+            aufrom = (String) ((JSONObject)((JSONObject)objResponse.get("query-continue")).get("allusers")).get("aufrom");
+            JSONArray users = (JSONArray) ((JSONObject)objResponse.get("query")).get("allusers");
+            List<User> usersList = getUsersList(users);
+            saveAllUsers(usersList);
+            url = this.URL_BASE + this.QUERY_PREFIX + "&" +this.QUERY_PARAM + "=" + aufrom;
+        } while (response.getStatusLine().getStatusCode() == 200 && !aufrom.isEmpty());
     }
 }
