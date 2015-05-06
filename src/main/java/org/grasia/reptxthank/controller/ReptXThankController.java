@@ -25,6 +25,10 @@ public class ReptXThankController {
 	
 	@RequestMapping("/")
 	public String fisrtContact(ModelMap model){
+		if(repxthxService.isFirstTime()){
+			repxthxService.launchThread();
+			repxthxService.setFirstTime(false);
+		}
 		model.addAttribute("message", "World!! Please, try to go to ReptXThank/welcome");
 		return "welcome";
 	}

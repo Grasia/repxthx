@@ -11,4 +11,8 @@ public interface RepxThxService {
 	void addUsersList(List<User> users);
 	
 	void launchThread();
+	
+	boolean isFirstTime();
+
+	void setFirstTime(boolean isFirstTime);
 }

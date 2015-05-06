@@ -16,6 +16,8 @@ public class RepxThxServiceImpl implements RepxThxService {
 	@Autowired
 	private UserDao userDao;
 
+	private boolean isFirstTime = true;
+	
 	@Override
 	public List<User> getAllUsers() {
 		List<User> users = userDao.getAllUsers();
@@ -34,7 +36,12 @@ public class RepxThxServiceImpl implements RepxThxService {
 			userDao.addUser(user);
 		}
 	}
-	
-	
-	
+
+	public boolean isFirstTime() {
+		return isFirstTime;
+	}
+
+	public void setFirstTime(boolean isFirstTime) {
+		this.isFirstTime = isFirstTime;
+	}	
 }
