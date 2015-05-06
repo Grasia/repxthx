@@ -2,6 +2,7 @@ package org.grasia.reptxthank.utils;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
-@Component
+@Component("updaterThread")
 public class UpdaterThread extends Thread{
 
 	@Value("${updater.thread.sleeptime}")
@@ -71,12 +72,14 @@ public class UpdaterThread extends Thread{
     private void sendGet() throws Exception {
  
     	String url = this.URL_BASE + this.QUERY_PREFIX;
-		HttpClient client = HttpClientBuilder.create().build();
+    	LOGGER.debug("URL TO REQUEST: " + url);
         JSONParser parser = new JSONParser();
         HttpResponse response = null;
         String aufrom = "";
         do {
-        	HttpGet request = new HttpGet(url);
+        	// String restUrl = URLEncoder.encode("You url parameter value", "UTF-8");
+    		HttpClient client = HttpClientBuilder.create().build();
+        	HttpGet request = new HttpGet(URLEncoder.encode(url, "UTF-8"));
             response = client.execute(request);
             BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             JSONObject objResponse = (JSONObject) parser.parse(rd);

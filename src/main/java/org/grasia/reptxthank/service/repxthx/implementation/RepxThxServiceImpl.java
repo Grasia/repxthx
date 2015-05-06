@@ -5,6 +5,7 @@ import java.util.List;
 import org.grasia.reptxthank.dao.user.UserDao;
 import org.grasia.reptxthank.model.User;
 import org.grasia.reptxthank.service.repxthx.RepxThxService;
+import org.grasia.reptxthank.utils.UpdaterThread;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,9 @@ public class RepxThxServiceImpl implements RepxThxService {
 	
 	@Autowired
 	private UserDao userDao;
+	
+	@Autowired
+	private UpdaterThread updaterThread;
 
 	private boolean isFirstTime = true;
 	
@@ -27,7 +31,7 @@ public class RepxThxServiceImpl implements RepxThxService {
 	@Override
 	public void launchThread() {
 		// TODO Auto-generated method stub
-		
+		updaterThread.start();
 	}
 
 	@Override
