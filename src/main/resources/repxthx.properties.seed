@@ -1,0 +1,15 @@
+#DATABASE CONNECTION INFORMATION
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://54.93.121.132:3306/repxthxdb
+jdbc.username=root
+jdbc.password=root
+
+#UPDATER THREAD
+#updater.thread.sleeptime=600000
+updater.thread.sleeptime=5000
+#WIKI-URL
+update.url.base=http://ec2-54-93-121-132.eu-central-1.compute.amazonaws.com
+update.url.query.users.prefix=/w/api.php?action=query&list=allusers&auprop=editcount|registration&format=json&aulimit=2
+update.url.query.users.param=aufrom
+#update.url.query.items.prefix=/w/api.php?action=query&list=allusers&auprop=editcount|registration&format=json&aulimit=5
+#update.url.query.items.param=aufrom
