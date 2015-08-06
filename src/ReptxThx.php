@@ -39,6 +39,8 @@ $wgAutoloadClasses['AbstractModelElement'] = $dir . '/model/AbstractModelElement
 $wgAutoloadClasses['Interaction'] = $dir . '/model/Interaction.php';
 $wgAutoloadClasses['ReptxThx_User'] = $dir . '/model/User.php';
 
+$wgAutoloadClasses['ReptxThxAlgorithm'] = $dir . '/includes/algorithm/ReptxThxAlgorithm.php';
+
 //// Register hooks
 //// See also http://www.mediawiki.org/wiki/Manual:Hooks
 $wgHooks['LoadExtensionSchemaUpdates'][] = 'ReptxThxHooks::onLoadExtensionSchemaUpdates';

@@ -11,15 +11,29 @@ class ReptxThxAlgorithm {
     private function stallCondition() {
         return true;
     }
-    
-    private function updateReputationValue(){
+
+    private function insertNewUsers() {
+        ReptxThx_User::insertNewUsers();
+    }
+
+    public static function updateReputationValue() {
         $continuation = "";
-        
-        $userArray = ReptxThx_User::getAllUsers($continuation);
-        
-        foreach($userArray as $user){
-            
+
+        $last = 0;
+        $userArray = ReptxThx_User::getUsersChunk($last);
+
+        while (!empty($userArray)) {
+            foreach ($userArray as $user) {
+                self::updateUserRepValue($user);
+            }
+
+            $userArray = ReptxThx_User::getUsersChunk($last);
         }
+    }
+
+    private function updateUserRepValue($user) {
+        
+        $createdArticles = Article::getUserCreatedArticles($user->getId);
     }
 
 }

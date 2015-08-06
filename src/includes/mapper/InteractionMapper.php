@@ -17,7 +17,11 @@ class InteractionMapper extends AbstractMapper {
     const INTERACTION_TABLE_NAME = 'reptxThx_interaction';
 
     public function insert(Interaction $interaction) {
-        error_log("interaction insert ");
+
+        if ($interaction->getType() == 2 && self::existsCreation($interaction)) {
+            return true;
+        }
+
         $dbw = $this->dbFactory->getForWrite();
 
         $id = $dbw->nextSequenceValue('reptxThx_interaction_id');
@@ -25,19 +29,28 @@ class InteractionMapper extends AbstractMapper {
         if ($id) {
             $row['interaction_id'] = $id;
         }
-
         $row = $interaction->toDbArray();
-        error_log((string) implode(" | ", $row));
-        error_log("row todbarray ");
-        $res = $dbw->insert('reptxThx_interaction', $row, __METHOD__);
-        error_log("inserted " . $res);
+        $res = $dbw->insert('reptxThx_interaction', $row, __METHOD__, array('IGNORE'));
+
         if ($res) {
-
             $id = $dbw->insertId();
-
             return $id;
         } else {
             return false;
+        }
+    }
+
+    public function existsCreation(Interaction $interaction) {
+        $db = $this->dbFactory->getForRead();
+        error_log("existsCreation");
+        $row = $db->selectRow('reptxThx_interaction', '*', array('interaction_sender_id' => $interaction->getSender(), 'interaction_type' => 2, 'interaction_page_id' => $interaction->getPageId()), __METHOD__);
+
+        if ($row == FALSE) {
+            error_log("existsCreation false");
+            return FALSE;
+        } else {
+            error_log("existsCreation true");
+            return TRUE;
         }
     }
 

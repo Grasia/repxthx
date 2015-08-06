@@ -57,22 +57,16 @@ class UserMapper extends AbstractMapper {
         return Interaction::newFromRow($row);
     }
 
-    public function getUsersArray($limit, $continuation) {
+    public function getUsersArray($limit, $last) {
         $data = array();
         $db = $this->dbFactory->getForRead();
-        $condition = "";
-        if ($continuation == "") {
-            $condition = "reptxthx_user_id>= 0";
-        } else {
-            $condition = "reptxthx_user_id>=" . $continuation;
+
+        $res = $db->select('reptxthx_user', '*', "reptxthx_user_id > $last", __METHOD__, array('LIMIT' => $limit, 'ORDER BY' => 'reptxThx_user_id'));
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
         }
-
-        $res = $db->select('user', '*', $condition, __METHOD__, array('LIMIT' => $limit, 'ORDER BY' => 'reptxThx_user_id'));
-
-        foreach ($res as $userRow) {
-            array_push($data, ReptxThx_User::newFromRow($userRow));
-        }
-
+        
         return $data;
     }
 
@@ -92,6 +86,27 @@ class UserMapper extends AbstractMapper {
             print_r($row);
             ReptxThx_User::create($row["user_id"], $defaultReputationValue, $defaultCreditValue);
         }
+    }
+
+    public function getWikiUsersNumber() {
+        $db = $this->dbFactory->getForRead();
+        $res = $db->selectRow('user', array('numUsers' => 'COUNT(*)'), '', __METHOD__);
+
+        return $res->numUsers;
+    }
+
+    public function getNewUsers() {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+        $limit = 250;
+
+        $res = $db->select(array('mediawikiUsers' => 'user', 'extensionUsers' => 'reptxthx_user'), 'mediawikiUsers.user_id', 'extensionUsers.user_id IS NULL', __METHOD__, array('LIMIT' => 250), array('extensionUsers' => array('LEFT JOIN', 'mediawikiUsers.user_id = extensionUsers.user_id')));
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->fetchRow());
+        }
+
+        return $data;
     }
 
 }

@@ -29,11 +29,11 @@ class Interaction extends AbstractModelElement {
 
     function __toString() {
         return "ReptxThx_Interaction(id={$this->id}; "
-        . "type={$this->type}; "
-        . "sender={$this->sender}; "
-        . "recipient={$this->recipient}; "
-        . "page_id={$this->page_id}; "
-        . "timestamp={$this->timestamp})";
+                . "type={$this->type}; "
+                . "sender={$this->sender}; "
+                . "recipient={$this->recipient}; "
+                . "page_id={$this->page_id}; "
+                . "timestamp={$this->timestamp})";
     }
 
     /**
@@ -106,7 +106,6 @@ class Interaction extends AbstractModelElement {
     protected function insert() {
         $interactionMapper = new InteractionMapper();
         return $interactionMapper->insert($this);
-        
     }
 
     /**
@@ -140,55 +139,54 @@ class Interaction extends AbstractModelElement {
         $this->recipient = $interaction->recipient;
         $this->page_id = $interaction->page_id;
         $this->timestamp = $interaction->timestamp;
-
     }
-    
-    	/**
-	 * Creates an EchoEvent from a row object
-	 *
-	 * @param $row stdClass row object from echo_event
-	 * @return EchoEvent object.
-	 */
-	public static function newFromRow( $row ) {
-		$obj = new Interaction();
-		$obj->loadFromRow( $row );
-		return $obj;
-	}
 
-	/**
-	 * Creates an EchoEvent from the database by ID
-	 *
-	 * @param $id int Event ID
-	 * @return EchoEvent
-	 */
-	public static function newFromID( $id ) {
-		$obj = new Interaction();
-		$obj->loadFromID( $id );
-		return $obj;
-	}
-        
-        public function getId() {
-		return $this->id;
-	}
-        
-        public function getType() {
-		return $this->type;
-	}
-        
-        public function getSender() {
-		return $this->sender;
-	}
-        
-        public function getRecipient() {
-		return $this->recipient;
-	}
-        
-        public function getPageId() {
-		return $this->getPageId;
-	}
-        
-        public function getTimestamp() {
-		return $this->getTimestamp;
-	}
+    /**
+     * Creates an EchoEvent from a row object
+     *
+     * @param $row stdClass row object from echo_event
+     * @return EchoEvent object.
+     */
+    public static function newFromRow($row) {
+        $obj = new Interaction();
+        $obj->loadFromRow($row);
+        return $obj;
+    }
+
+    /**
+     * Creates an EchoEvent from the database by ID
+     *
+     * @param $id int Event ID
+     * @return EchoEvent
+     */
+    public static function newFromID($id) {
+        $obj = new Interaction();
+        $obj->loadFromID($id);
+        return $obj;
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getType() {
+        return $this->type;
+    }
+
+    public function getSender() {
+        return $this->sender;
+    }
+
+    public function getRecipient() {
+        return $this->recipient;
+    }
+
+    public function getPageId() {
+        return $this->page_id;
+    }
+
+    public function getTimestamp() {
+        return $this->getTimestamp;
+    }
 
 }

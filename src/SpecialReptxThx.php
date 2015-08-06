@@ -24,20 +24,8 @@ class SpecialReptxThx extends SpecialPage {
      *  [[Special:HelloWorld/subpage]].
      */
     public function execute($sub) {
-        $row =(object) array(
-            "reptxthx_user_id" => "a",
-            "user_id" => "b",
-            "user_rep_value" => "c",
-            "user_cred_value" => "d",
-            "user_last_rep_timestamp" => "e",
-            "user_last_cred_timestamp" => "f"
-        );
-//        echo($row);
-        $user = ReptxThx_User::newFromRow($row);
-        $out = $this->getOutput();
-        $out->addWikiMsg( (string)$user);
-        
-        ReptxThx_User::insertAllUsers();
+        ReptxThxAlgorithm::updateReputationValue();
+
     }
 
     protected function getGroupName() {

@@ -118,15 +118,59 @@ class ReptxThx_User extends AbstractModelElement {
         return $data;
     }
 
-    public static function getAllUsers(&$continuation) {
+    public static function getUsersChunk(&$last) {
+
+        $data = array();
 
         $userMapper = new UserMapper();
-        return $userMapper->getUsersArray(1000, $continuation);
+        $usersChunk = $userMapper->getUsersArray(250, $last);
+
+        foreach ($usersChunk as $userRow) {
+            array_push($data, self::newFromRow($userRow));
+        }
+        if (!empty($data)) {
+            $last = end($data)->getId();
+        }
+        return $data;
     }
 
     public static function insertAllUsers() {
         $userMapper = new UserMapper();
         return $userMapper->insertAllUsers();
+    }
+
+    public static function insertNewUsers() {
+        $userMapper = new UserMapper();
+        $newUsers = $userMapper->getNewUsers();
+
+        $defRepVal = self::getDefaultReputationValue();
+        $defCredVal = self::getDefaultCreditValue();
+        while (!empty($newUsers)) {
+            foreach ($newUsers as $user) {
+                self::create($user['user_id'], $defRepVal, $defCredVal);
+            }
+
+            $newUsers = $userMapper->getNewUsers();
+        }
+    }
+
+    public static function getDefaultReputationValue() {
+        $userMapper = new UserMapper();
+        $numUsers = $userMapper->getWikiUsersNumber();
+
+        return 1 / sqrt($numUsers);
+    }
+
+    public static function getDefaultCreditValue() {
+        return 0;
+    }
+
+    public function getUserId() {
+        return $this->userId;
+    }
+
+    public function getId() {
+        return $this->id;
     }
 
 }

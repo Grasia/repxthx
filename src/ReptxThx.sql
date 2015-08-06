@@ -10,7 +10,6 @@ CREATE TABLE /*_*/reptxthx_interaction (
 
 CREATE INDEX /*i*/reptxThx_Interaction_recipient_pageId on /*_*/reptxThx_Interaction (interaction_recipient_id,interaction_page_id);
 
-
 CREATE TABLE /*_*/reptxthx_user (
 	reptxthx_user_id int unsigned not null primary key auto_increment,
 	user_id int unsigned not null,
