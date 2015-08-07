@@ -37,7 +37,7 @@ $wgAutoloadClasses['UserMapper'] = $dir . '/includes/mapper/UserMapper.php';
 
 $wgAutoloadClasses['AbstractModelElement'] = $dir . '/model/AbstractModelElement.php';
 $wgAutoloadClasses['Interaction'] = $dir . '/model/Interaction.php';
-$wgAutoloadClasses['ReptxThx_User'] = $dir . '/model/User.php';
+$wgAutoloadClasses['ReptxThx_User'] = $dir . '/model/ReptxThxUser.php';
 
 $wgAutoloadClasses['ReptxThxAlgorithm'] = $dir . '/includes/algorithm/ReptxThxAlgorithm.php';
 

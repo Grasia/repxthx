@@ -53,6 +53,14 @@ class InteractionMapper extends AbstractMapper {
             return TRUE;
         }
     }
+    
+    public function getUserDegree($userId){
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), "interaction_sender_id = $userId OR interaction_recipient_id = $userId", __METHOD__);
+
+        return $res->userDegree;
+    }
 
     /**
      * Create an EchoEvent by id

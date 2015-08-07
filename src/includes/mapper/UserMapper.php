@@ -16,7 +16,7 @@ class UserMapper extends AbstractMapper {
      */
     const USER_TABLE_NAME = 'reptxThx_user';
 
-    public function insert(ReptxThx_User $user) {
+    public function insert(ReptxThxUser $user) {
         $dbw = $this->dbFactory->getForWrite();
 
         $id = $dbw->nextSequenceValue('reptxThx_user_id');
@@ -72,20 +72,6 @@ class UserMapper extends AbstractMapper {
 
     public function getWikiUsersArray($limit, $continuation) {
         
-    }
-
-    public function insertAllUsers() {
-
-        $db = $this->dbFactory->getForRead();
-        $defaultReputationValue = 0;
-        $defaultCreditValue = 0;
-
-        $res = $db->select('user', 'user_id', '', __METHOD__);
-
-        while ($row = $res->fetchRow()) {
-            print_r($row);
-            ReptxThx_User::create($row["user_id"], $defaultReputationValue, $defaultCreditValue);
-        }
     }
 
     public function getWikiUsersNumber() {

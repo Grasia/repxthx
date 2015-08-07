@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-class ReptxThx_User extends AbstractModelElement {
+class ReptxThxUser extends AbstractModelElement {
 
     protected $id;
     protected $userId;
@@ -33,7 +33,7 @@ class ReptxThx_User extends AbstractModelElement {
             throw new ReadOnlyError();
         }
 
-        $obj = new ReptxThx_User;
+        $obj = new ReptxThxUser;
 
         if (empty($userId)) {
             throw new MWException("'type' parameter missing");
@@ -86,19 +86,19 @@ class ReptxThx_User extends AbstractModelElement {
 
     public function loadFromID($id) {
         $userMapper = new UserMapper();
-        $user = $interactionMapper->getById($id);
+        $user = $userMapper->getById($id);
 
         // Copy over the attribute
         $this->id = $user->id;
-        $this->type = $user->type;
-        $this->sender = $user->sender;
-        $this->recipient = $user->recipient;
-        $this->page_id = $user->page_id;
-        $this->timestamp = $user->timestamp;
+        $this->userId = $user->userId;
+        $this->userReputationValue = $user->userReputationValue;
+        $this->userCreditValue = $user->userCreditValue;
+        $this->lastRepUpdateTimestamp = $user->lastRepUpdateTimestamp;
+        $this->lastCredUpdateTimestamp = $user->lastCredUpdateTimestamp;
     }
 
     public static function newFromRow($row) {
-        $obj = new ReptxThx_User();
+        $obj = new ReptxThxUser();
         $obj->loadFromRow($row);
         return $obj;
     }
@@ -133,12 +133,7 @@ class ReptxThx_User extends AbstractModelElement {
         }
         return $data;
     }
-
-    public static function insertAllUsers() {
-        $userMapper = new UserMapper();
-        return $userMapper->insertAllUsers();
-    }
-
+    
     public static function insertNewUsers() {
         $userMapper = new UserMapper();
         $newUsers = $userMapper->getNewUsers();

@@ -15,14 +15,6 @@ class Interaction extends AbstractModelElement {
     protected $page_id = null;
     protected $timestamp = null;
 
-    /**
-     * RECOMENTAR
-     * You should not call the constructor.
-     * Instead use one of the factory functions:
-     * EchoEvent::create        To create a new event
-     * EchoEvent::newFromRow    To create an event object from a row object
-     * EchoEvent::newFromID     To create an event object from the database given its ID
-     */
     protected function __construct() {
         
     }
@@ -36,19 +28,8 @@ class Interaction extends AbstractModelElement {
                 . "timestamp={$this->timestamp})";
     }
 
-    /**
-     * 
-     * @staticvar array $validFields
-     * @param type $type
-     * @param type $sender
-     * @param type $recipient
-     * @param type $page_id
-     * @return \Interaction
-     * @throws ReadOnlyError
-     * @throws MWException
-     */
     public static function create($type, $sender, $recipient, $page_id) {
-        // Do not create event and notifications if write access is locked
+
         if (wfReadOnly()) {
             throw new ReadOnlyError();
         }
@@ -80,10 +61,6 @@ class Interaction extends AbstractModelElement {
         return $obj;
     }
 
-    /**
-     * 
-     * @return type
-     */
     public function toDbArray() {
 
         $data = array(
@@ -100,19 +77,11 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
-    /**
-     * Inserts the object into the database.
-     */
     protected function insert() {
         $interactionMapper = new InteractionMapper();
         return $interactionMapper->insert($this);
     }
 
-    /**
-     * Loads data from the provided $row into this object.
-     *
-     * @param $row stdClass row object from echo_event
-     */
     public function loadFromRow($row) {
         $this->id = $row->interaction_id;
         $this->type = $row->interaction_type;
@@ -123,16 +92,10 @@ class Interaction extends AbstractModelElement {
         $this->timestamp = $row->interaction_timestamp;
     }
 
-    /**
-     * Loads data from the database into this object, given the event ID.
-     * @param $id int Event ID
-     * @param $fromMaster bool
-     */
     public function loadFromID($id) {
         $interactionMapper = new InteractionMapper();
         $interaction = $interactionMapper->getById($id);
 
-        // Copy over the attribute
         $this->id = $interaction->id;
         $this->type = $interaction->type;
         $this->sender = $interaction->sender;
@@ -141,28 +104,21 @@ class Interaction extends AbstractModelElement {
         $this->timestamp = $interaction->timestamp;
     }
 
-    /**
-     * Creates an EchoEvent from a row object
-     *
-     * @param $row stdClass row object from echo_event
-     * @return EchoEvent object.
-     */
     public static function newFromRow($row) {
         $obj = new Interaction();
         $obj->loadFromRow($row);
         return $obj;
     }
 
-    /**
-     * Creates an EchoEvent from the database by ID
-     *
-     * @param $id int Event ID
-     * @return EchoEvent
-     */
     public static function newFromID($id) {
         $obj = new Interaction();
         $obj->loadFromID($id);
         return $obj;
+    }
+
+    public function getUserDegree($userId) {
+        $interactionMapper = new InteractionMapper();
+        $interaction = $interactionMapper->getUserDegree($userId);
     }
 
     public function getId() {
