@@ -17,7 +17,6 @@ class ReptxThxAlgorithm {
     }
 
     public static function updateReputationValue() {
-        $continuation = "";
 
         $last = 0;
         $userArray = ReptxThxUser::getUsersChunk($last);
@@ -25,44 +24,74 @@ class ReptxThxAlgorithm {
         while (!empty($userArray)) {
             foreach ($userArray as $user) {
                 self::updateUserRepValue($user);
+                self::updateUserCredValue($user);
             }
 
             $userArray = ReptxThxUser::getUsersChunk($last);
         }
     }
+    
+    
 
-    private function updateUserRepValue($user) {
-
+    private function updateUserRepValue(ReptxThxUser $user) {
+        error_log("updateUserRepValue");
         $revWeight = 1;
         $thankGivenWeight = 1;
         $thankReceivedWeight = 1;
 
         $tetaR = 1;
-        $roF = 1;
+        $roF = 0.1;
 
         $repValue = 0;
-        
-        $fitnessAvg = ReptxThxArticle::getFitnessAvg();
-        $userInteractionDegree = Interaction::getUserDegree();
+        $repFinalVal = 0;
 
-        $createdArticles = Interaction::getUserCreatedArticles($user->getId());
-        foreach ($createdArticles as $article) {
-            $repValue += $revWeight*($article->getFitness() - $roF*$fitnessAvg);
+        $fitnessAvg = ReptxThxPage::getFitnessAvg();
+        $userInteractionDegree = Interaction::getUserCompleteDegree($user->getUserId());
+
+        if ($userInteractionDegree > 0) {
+            $createdArticles = Interaction::getUserCreatedArticles($user->getUserId());
+            foreach ($createdArticles as $article) {
+                $repValue += $revWeight * ($article->getFitness() - $roF * $fitnessAvg);
+            }
+
+            $thanksRecArticles = Interaction::getUserThanksReceived($user->getUserId());
+            foreach ($thanksRecArticles as $article) {
+                $repValue += $thankReceivedWeight * ($article->getFitness() - $roF * $fitnessAvg);
+            }
+
+            $thanksGivArticles = Interaction::getUserThanksGiven($user->getUserId());
+            foreach ($thanksGivArticles as $article) {
+                $repValue += $thankGivenWeight * ($article->getFitness() - $roF * $fitnessAvg);
+            }
+
+            $repFinalVal = 1 / pow($userInteractionDegree, $tetaR) * $repValue;
         }
 
-        $thanksRecArticles = Interaction::getUserThanksReceived($user->getId());
-        foreach ($thanksRecArticles as $article) {
-            $repValue += $thankGivenWeight*($article->getFitness() - $roF*$fitnessAvg);
-        }
-
-        $thanksGivArticles = Interaction::getUserThanksGiven($user->getId());
-        foreach ($thanksGivArticles as $article) {
-            $repValue += $thankReceivedWeight*($article->getFitness() - $roF*$fitnessAvg);
-        }
-        
-        $repFinalVal = 1/pow($userInteractionDegree,$tetaR)*$repValue;
-        
         $user->updateTempRepValue($repFinalVal);
+    }
+    
+    private function updateUserCredValue(ReptxThxUser $user) {
+        error_log("updateUserCredValue");
+
+        $tetaA = 1;
+        $roA = 0.1;
+
+        $credValue = 0;
+        $credFinalVal = 0;
+
+        $creditAvg = ReptxThxUser::getCreditAvg();
+        $userCreationDegree = Interaction::getUserCreationDegree($user->getUserId());
+
+        if ($userCreationDegree > 0) {
+            $createdArticles = Interaction::getUserCreatedArticles($user->getUserId());
+            foreach ($createdArticles as $article) {
+                $credValue += ($article->getFitness() - $roA * $creditAvg);
+            }
+
+            $credFinalVal = 1 / pow($userCreationDegree, $tetaA) * $credValue;
+        }
+
+        $user->updateTempCredValue($credFinalVal);
     }
 
 }

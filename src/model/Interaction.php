@@ -86,9 +86,9 @@ class Interaction extends AbstractModelElement {
         $this->id = $row->interaction_id;
         $this->type = $row->interaction_type;
 
-        $this->sender = $row->interaction_sender;
-        $this->recipient = $row->interaction_recipient;
-        $this->page_id = $row->interaction_pageId;
+        $this->sender = $row->interaction_sender_id;
+        $this->recipient = $row->interaction_recipient_id;
+        $this->page_id = $row->interaction_page_id;
         $this->timestamp = $row->interaction_timestamp;
     }
 
@@ -116,9 +116,57 @@ class Interaction extends AbstractModelElement {
         return $obj;
     }
 
-    public function getUserDegree($userId) {
+    public static function getUserCompleteDegree($userId) {
         $interactionMapper = new InteractionMapper();
-        $interaction = $interactionMapper->getUserDegree($userId);
+        $degree = $interactionMapper->getUserDegree($userId);
+
+        return $degree;
+    }
+    
+    public static function getUserCreationDegree($userId) {
+        $interactionMapper = new InteractionMapper();
+        $degree = $interactionMapper->getUserCreationDegree($userId);
+        
+        return $degree;
+    }
+    
+    public static function getUserCreatedArticles($userId){
+        $data = array();
+        $interactionMapper = new InteractionMapper();
+        $articleIdList = $interactionMapper->getUserCreatedArticles($userId);
+        
+        foreach($articleIdList as $article){
+           
+            $article = ReptxThxPage::newFromId($article->interaction_page_id);
+            array_push($data, $article);
+        }
+        return $data;
+    }
+    
+    public static function getUserThanksReceived($userId){
+        $data = array();
+        $interactionMapper = new InteractionMapper();
+        $articleIdList = $interactionMapper->getUserThanksReceived($userId);
+        
+        foreach($articleIdList as $article){
+           
+            $article = ReptxThxPage::newFromId($article->interaction_page_id);
+            array_push($data, $article);
+        }
+        return $data;
+    }
+    
+    public static function getUserThanksGiven($userId){
+        $data = array();
+        $interactionMapper = new InteractionMapper();
+        $articleIdList = $interactionMapper->getUserThanksGiven($userId);
+        
+        foreach($articleIdList as $article){
+           
+            $article = ReptxThxPage::newFromId($article->interaction_page_id);
+            array_push($data, $article);
+        }
+        return $data;
     }
 
     public function getId() {

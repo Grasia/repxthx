@@ -28,6 +28,7 @@ class ReptxThxHooks {
         $updater->addExtensionTable('reptxthx_user', $baseSQLFile);
         $updater->addExtensionTable('reptxthx_page', $baseSQLFile);
         
+        
         return true;
     }
 

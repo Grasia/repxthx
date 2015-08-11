@@ -24,8 +24,21 @@ class SpecialReptxThx extends SpecialPage {
      *  [[Special:HelloWorld/subpage]].
      */
     public function execute($sub) {
-        ReptxThxAlgorithm::updateReputationValue();
 
+        $out = $this->getOutput();
+
+        $out->setPageTitle($this->msg('example-helloworld'));
+
+        // Parses message from .i18n.php as wikitext and adds it to the
+        // page output.
+//        ReptxThxPage::insertNewPages();
+        ReptxThxUser::insertNewUsers();
+//        $arr = Interaction::getUserThanksGiven(1);
+//        getUserThanksReceived($userId)
+//        print_r($arr);
+        
+        ReptxThxAlgorithm::updateReputationValue();
+//        $out->addWikiMsg((string) $i);
     }
 
     protected function getGroupName() {

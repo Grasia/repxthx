@@ -53,8 +53,8 @@ class InteractionMapper extends AbstractMapper {
             return TRUE;
         }
     }
-    
-    public function getUserDegree($userId){
+
+    public function getUserDegree($userId) {
         $db = $this->dbFactory->getForRead();
 
         $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), "interaction_sender_id = $userId OR interaction_recipient_id = $userId", __METHOD__);
@@ -62,18 +62,57 @@ class InteractionMapper extends AbstractMapper {
         return $res->userDegree;
     }
 
-    /**
-     * Create an EchoEvent by id
-     *
-     * @param int
-     * @param boolean
-     * @return EchoEvent
-     * @throws MWException
-     */
-    public function getById($id) {
-        $db = $this->dbFactory->getEchoDb(DB_MASTER);
+    public function getUserCreationDegree($userId) {
+        $db = $this->dbFactory->getForRead();
 
-        $row = $db->selectRow(INTERACTION_TABLE_NAME, '*', array('interaction_id' => $id), __METHOD__);
+        $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), array('interaction_sender_id' => $userId,'interaction_type' => 2 ), __METHOD__);
+
+        return $res->userDegree;
+    }
+
+    public function getUserCreatedArticles($userId) {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->select('reptxThx_interaction', 'interaction_page_id', array('interaction_type' => 2, 'interaction_sender_id' => $userId), __METHOD__);
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
+        }
+
+        return $data;
+    }
+
+    public function getUserThanksReceived($userId) {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->select('reptxThx_interaction', 'interaction_page_id', array('interaction_type' => 1, 'interaction_recipient_id' => $userId), __METHOD__);
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
+        }
+
+        return $data;
+    }
+
+    public function getUserThanksGiven($userId) {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->select('reptxThx_interaction', 'interaction_page_id', array('interaction_type' => 1, 'interaction_sender_id' => $userId), __METHOD__);
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
+        }
+
+        return $data;
+    }
+
+    public function getById($id) {
+        $db = $this->dbFactory->getForRead(DB_MASTER);
+
+        $row = $db->selectRow('reptxthx_interaction', '*', array('interaction_id' => $id), __METHOD__);
 
         if (!$row) {
             throw new MWException("No Interaction found with ID: $id");

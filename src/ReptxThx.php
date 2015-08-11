@@ -34,10 +34,12 @@ $wgAutoloadClasses['DbFactory'] = $dir . '/includes/DbFactory.php';
 $wgAutoloadClasses['InteractionMapper'] = $dir . '/includes/mapper/InteractionMapper.php';
 $wgAutoloadClasses['AbstractMapper'] = $dir . '/includes/mapper/AbstractMapper.php';
 $wgAutoloadClasses['UserMapper'] = $dir . '/includes/mapper/UserMapper.php';
+$wgAutoloadClasses['PageMapper'] = $dir . '/includes/mapper/PageMapper.php';
 
 $wgAutoloadClasses['AbstractModelElement'] = $dir . '/model/AbstractModelElement.php';
 $wgAutoloadClasses['Interaction'] = $dir . '/model/Interaction.php';
-$wgAutoloadClasses['ReptxThx_User'] = $dir . '/model/ReptxThxUser.php';
+$wgAutoloadClasses['ReptxThxUser'] = $dir . '/model/ReptxThxUser.php';
+$wgAutoloadClasses['ReptxThxPage'] = $dir . '/model/ReptxThxPage.php';
 
 $wgAutoloadClasses['ReptxThxAlgorithm'] = $dir . '/includes/algorithm/ReptxThxAlgorithm.php';
 

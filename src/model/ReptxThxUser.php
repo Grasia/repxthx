@@ -133,7 +133,7 @@ class ReptxThxUser extends AbstractModelElement {
         }
         return $data;
     }
-    
+
     public static function insertNewUsers() {
         $userMapper = new UserMapper();
         $newUsers = $userMapper->getNewUsers();
@@ -158,6 +158,34 @@ class ReptxThxUser extends AbstractModelElement {
 
     public static function getDefaultCreditValue() {
         return 0;
+    }
+
+    public static function getReputationAvg() {
+        $userMapper = new UserMapper();
+        $avgRep = $userMapper->getReputationAvg();
+
+        return $avgRep;
+    }
+
+    public static function getCreditAvg() {
+        $userMapper = new UserMapper();
+        $avgRep = $userMapper->getCreditAvg();
+
+        return $avgRep;
+    }
+
+    public function updateTempRepValue($value) {
+        $userMapper = new UserMapper();
+        $res = $userMapper->updateTempRepValue($this->userId, $value);
+
+        return $res;
+    }
+    
+    public function updateTempCredValue($value) {
+        $userMapper = new UserMapper();
+        $res = $userMapper->updateTempCredValue($this->userId, $value);
+
+        return $res;
     }
 
     public function getUserId() {
