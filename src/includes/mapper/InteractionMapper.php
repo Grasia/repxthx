@@ -65,12 +65,28 @@ class InteractionMapper extends AbstractMapper {
     public function getUserCreationDegree($userId) {
         $db = $this->dbFactory->getForRead();
 
-        $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), array('interaction_sender_id' => $userId,'interaction_type' => 2 ), __METHOD__);
+        $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), array('interaction_sender_id' => $userId, 'interaction_type' => 2), __METHOD__);
 
         return $res->userDegree;
     }
 
-    public function getUserCreatedArticles($userId) {
+    public function getPageDegree($pageId) {
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->selectRow('reptxThx_interaction', array('pageDegree' => 'COUNT(*)'), array('interaction_page_id' => $pageId), __METHOD__);
+
+        return $res->pageDegree;
+    }
+
+    public function getPageCreationDegree($pageId) {
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->selectRow('reptxThx_interaction', array('pageDegree' => 'COUNT(*)'), array('interaction_page_id' => $pageId, 'interaction_type' => 2), __METHOD__);
+
+        return $res->pageDegree;
+    }
+
+    public function getUserCreatedPages($userId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
 
@@ -101,6 +117,45 @@ class InteractionMapper extends AbstractMapper {
         $db = $this->dbFactory->getForRead();
 
         $res = $db->select('reptxThx_interaction', 'interaction_page_id', array('interaction_type' => 1, 'interaction_sender_id' => $userId), __METHOD__);
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
+        }
+
+        return $data;
+    }
+
+    public function getPageCreatingUser($pageId) {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->select('reptxThx_interaction', 'interaction_sender_id', array('interaction_type' => 2, 'interaction_page_id' => $pageId), __METHOD__);
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
+        }
+
+        return $data;
+    }
+
+    public function getPageThanksReceived($pageId) {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->select('reptxThx_interaction', 'interaction_sender_id', array('interaction_type' => 1, 'interaction_page_id' => $pageId), __METHOD__);
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->next());
+        }
+
+        return $data;
+    }
+
+    public function getPageThanksGiven($pageId) {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+
+        $res = $db->select('reptxThx_interaction', 'interaction_recipient_id', array('interaction_type' => 1, 'interaction_page_id' => $pageId), __METHOD__);
 
         for ($i = 0; $i < $res->numRows(); $i++) {
             array_push($data, $res->next());

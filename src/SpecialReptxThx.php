@@ -32,12 +32,13 @@ class SpecialReptxThx extends SpecialPage {
         // Parses message from .i18n.php as wikitext and adds it to the
         // page output.
 //        ReptxThxPage::insertNewPages();
-        ReptxThxUser::insertNewUsers();
+//        ReptxThxUser::insertNewUsers();
+//        ReptxThxPage::insertNewPages();
 //        $arr = Interaction::getUserThanksGiven(1);
 //        getUserThanksReceived($userId)
 //        print_r($arr);
         
-        ReptxThxAlgorithm::updateReputationValue();
+        ReptxThxAlgorithm::execute();
 //        $out->addWikiMsg((string) $i);
     }
 

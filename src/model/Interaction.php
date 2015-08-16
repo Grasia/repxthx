@@ -122,47 +122,101 @@ class Interaction extends AbstractModelElement {
 
         return $degree;
     }
-    
+
     public static function getUserCreationDegree($userId) {
         $interactionMapper = new InteractionMapper();
         $degree = $interactionMapper->getUserCreationDegree($userId);
-        
+
+        return $degree;
+    }
+
+    public static function getPageCompleteDegree($pageId) {
+        $interactionMapper = new InteractionMapper();
+        $degree = $interactionMapper->getPageDegree($pageId);
+
+        return $degree;
+    }
+
+    public static function getPageCretionDegree($pageId) {
+        $interactionMapper = new InteractionMapper();
+        $degree = $interactionMapper->getPageCreationDegree($pageId);
+
         return $degree;
     }
     
-    public static function getUserCreatedArticles($userId){
+    
+    public static function getPageCreatingUsers($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
-        $articleIdList = $interactionMapper->getUserCreatedArticles($userId);
-        
-        foreach($articleIdList as $article){
-           
+        $userIdList = $interactionMapper->getPageCreatingUser($pageId);
+        foreach ($userIdList as $user) {
+
+            $user = ReptxThxUser::newFromId($user->interaction_sender_id);
+            array_push($data, $user);
+        }
+        return $data;
+       
+    }
+    
+    public static function getPageThanksReceived($pageId) {
+        $data = array();
+        $interactionMapper = new InteractionMapper();
+        $userIdList = $interactionMapper->getPageThanksReceived($pageId);
+
+        foreach ($userIdList as $user) {
+
+            $user = ReptxThxUser::newFromId($user->interaction_sender_id);
+            array_push($data, $user);
+        }
+        return $data;
+    }
+    
+    public static function getPageThanksGiven($pageId) {
+        $data = array();
+        $interactionMapper = new InteractionMapper();
+        $userIdList = $interactionMapper->getPageThanksGiven($pageId);
+
+        foreach ($userIdList as $user) {
+
+            $user = ReptxThxUser::newFromId($user->interaction_recipient_id);
+            array_push($data, $user);
+        }
+        return $data;
+    }
+
+    public static function getUserCreatedArticles($userId) {
+        $data = array();
+        $interactionMapper = new InteractionMapper();
+        $articleIdList = $interactionMapper->getUserCreatedPages($userId);
+
+        foreach ($articleIdList as $article) {
+
             $article = ReptxThxPage::newFromId($article->interaction_page_id);
             array_push($data, $article);
         }
         return $data;
     }
-    
-    public static function getUserThanksReceived($userId){
+
+    public static function getUserThanksReceived($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
-        $articleIdList = $interactionMapper->getUserThanksReceived($userId);
-        
-        foreach($articleIdList as $article){
-           
+        $articleIdList = $interactionMapper->getUserThanksReceived($pageId);
+
+        foreach ($articleIdList as $article) {
+
             $article = ReptxThxPage::newFromId($article->interaction_page_id);
             array_push($data, $article);
         }
         return $data;
     }
-    
-    public static function getUserThanksGiven($userId){
+
+    public static function getUserThanksGiven($userId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
         $articleIdList = $interactionMapper->getUserThanksGiven($userId);
-        
-        foreach($articleIdList as $article){
-           
+
+        foreach ($articleIdList as $article) {
+
             $article = ReptxThxPage::newFromId($article->interaction_page_id);
             array_push($data, $article);
         }

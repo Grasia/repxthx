@@ -50,6 +50,7 @@ class ReptxThxPage extends AbstractModelElement {
         $obj->id = false;
         $obj->pageId = $pageId;
         $obj->pageFitnessValue = $pageFitnessValue;
+        $obj->pageTempFitnessValue = $pageFitnessValue;
 
         $obj->insert();
 
@@ -73,6 +74,7 @@ class ReptxThxPage extends AbstractModelElement {
         $this->pageId = $row->page_id;
 
         $this->pageFitnessValue = $row->page_fitness_value;
+        $this->pageTempFitnessValue = $row->page_temp_fitness_value;
         $this->lastFitnessUpdateTimestamp = $row->page_last_fitness_timestamp;
     }
 
@@ -85,6 +87,7 @@ class ReptxThxPage extends AbstractModelElement {
             $this->pageId = $page->pageId;
 
             $this->pageFitnessValue = $page->pageFitnessValue;
+            $this->pageTempFitnessValue = $page->pageTempFitnessValue;
             $this->lastFitnessUpdateTimestamp = $page->lastFitnessUpdateTimestamp;
         }
     }
@@ -99,7 +102,8 @@ class ReptxThxPage extends AbstractModelElement {
         $data = array(
             'page_id' => $this->pageId,
             'page_fitness_value' => $this->pageFitnessValue,
-            'page_last_fitness_timestamp' => $this->lastFitnessUpdateTimestamp
+            'page_last_fitness_timestamp' => $this->lastFitnessUpdateTimestamp,
+            'page_temp_fitness_value' => $this->pageTempFitnessValue
         );
         if ($this->id) {
             $data['reptxthx_article_id'] = $this->id;
@@ -108,15 +112,15 @@ class ReptxThxPage extends AbstractModelElement {
         return $data;
     }
 
-    public static function getArticlesChunk(&$last) {
+    public static function getPagesChunk(&$last) {
 
         $data = array();
 
-        $articleMapper = new PageMapper();
-        $articlesChunk = $articleMapper->getArticlesArray(250, $last);
+        $pageMapper = new PageMapper();
+        $pagessChunk = $pageMapper->getPagesArray(250, $last);
 
-        foreach ($articlesChunk as $articleRow) {
-            array_push($data, self::newFromRow($articleRow));
+        foreach ($pagessChunk as $pageRow) {
+            array_push($data, self::newFromRow($pageRow));
         }
         if (!empty($data)) {
             $last = end($data)->getId();
@@ -154,7 +158,26 @@ class ReptxThxPage extends AbstractModelElement {
         return $avgArticles;
     }
 
-    public function getArticleId() {
+    public static function getFitNormValue() {
+        $articleMapper = new PageMapper();
+        $sqrSum = $articleMapper->getFitSqrSum();
+
+        $normValue = sqrt($sqrSum);
+        return $normValue;
+    }
+
+    public function updateTempFitnessValue($value) {
+        $pageMapper = new PageMapper();
+        $res = $pageMapper->updateTempFitValue($this->pageId, $value);
+
+        return $res;
+    }
+
+    public function normalizeFitness($fitNormVal) {
+        
+    }
+
+    public function getPageId() {
         return $this->pageId;
     }
 
@@ -164,6 +187,10 @@ class ReptxThxPage extends AbstractModelElement {
 
     public function getFitness() {
         return $this->pageFitnessValue;
+    }
+
+    public function getTempFitness() {
+        return $this->pageTempFitnessValue;
     }
 
 }

@@ -54,7 +54,7 @@ class UserMapper extends AbstractMapper {
             throw new MWException("No Users found with ID: $id");
         }
 
-        return Interaction::newFromRow($row);
+        return ReptxThxUser::newFromRow($row);
     }
 
     public function getUsersArray($limit, $last) {
@@ -97,7 +97,7 @@ class UserMapper extends AbstractMapper {
 
     public function updateTempRepValue($userId, $value) {
 
-        $db = $this->dbFactory->getForRead();
+        $db = $this->dbFactory->getForWrite();
 
         $res = $db->update('reptxthx_user', array('user_temp_rep_value' => $value), array('user_id' => $userId), __METHOD__);
 
@@ -105,9 +105,41 @@ class UserMapper extends AbstractMapper {
     }
 
     public function updateTempCredValue($userId, $value) {
-        $db = $this->dbFactory->getForRead();
+        $db = $this->dbFactory->getForWrite();
 
         $res = $db->update('reptxthx_user', array('user_temp_cred_value' => $value), array('user_id' => $userId), __METHOD__);
+
+        return $res;
+    }
+
+    public function getRepSqrSum() {
+        $db = $this->dbFactory->getForRead();
+        $res = $db->selectRow('reptxthx_user', array('sqrSum' => 'SUM(user_temp_rep_value * user_temp_rep_value)'), '', __METHOD__);
+
+        return $res->sqrSum;
+    }
+
+    public function getCredSqrSum() {
+        $db = $this->dbFactory->getForRead();
+        $res = $db->selectRow('reptxthx_user', array('sqrSum' => 'SUM(user_temp_cred_value * user_temp_cred_value)'), '', __METHOD__);
+
+        return $res->sqrSum;
+    }
+
+    public function normalizeReputation($normalizedValue, $userId) {
+
+        $db = $this->dbFactory->getForWrite();
+
+        $res = $db->update('reptxthx_user', array('user_temp_rep_value' => $normalizedValue), array('user_id' => $userId), __METHOD__);
+
+        return $res;
+    }
+
+    public function normalizeCredit($normalizedValue, $userId) {
+
+        $db = $this->dbFactory->getForWrite();
+
+        $res = $db->update('reptxthx_user', array('user_temp_cred_value' => $normalizedValue), array('user_id' => $userId), __METHOD__);
 
         return $res;
     }

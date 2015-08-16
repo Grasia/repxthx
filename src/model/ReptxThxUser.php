@@ -12,6 +12,8 @@ class ReptxThxUser extends AbstractModelElement {
     protected $userId;
     protected $userReputationValue;
     protected $userCreditValue;
+    protected $userTempReputationValue;
+    protected $userTempCreditValue;
     protected $lastRepUpdateTimestamp;
     protected $lastCredUpdateTimestamp;
 
@@ -63,6 +65,8 @@ class ReptxThxUser extends AbstractModelElement {
         $obj->userId = $userId;
         $obj->userReputationValue = $userReputationValue;
         $obj->userCreditValue = $userCreditValue;
+        $obj->userTempReputationValue = $userReputationValue;
+        $obj->userTempCreditValue = $userCreditValue;
 
         $obj->insert();
 
@@ -82,24 +86,34 @@ class ReptxThxUser extends AbstractModelElement {
         $this->userCreditValue = $row->user_cred_value;
         $this->lastRepUpdateTimestamp = $row->user_last_rep_timestamp;
         $this->lastCredUpdateTimestamp = $row->user_last_cred_timestamp;
+
+        $this->userTempReputationValue = $row->user_temp_rep_value;
+        $this->userTempCreditValue = $row->user_temp_cred_value;
     }
 
     public function loadFromID($id) {
         $userMapper = new UserMapper();
-        $user = $userMapper->getById($id);
+        $user = $userMapper->getByUserId($id);
 
-        // Copy over the attribute
         $this->id = $user->id;
         $this->userId = $user->userId;
         $this->userReputationValue = $user->userReputationValue;
         $this->userCreditValue = $user->userCreditValue;
         $this->lastRepUpdateTimestamp = $user->lastRepUpdateTimestamp;
         $this->lastCredUpdateTimestamp = $user->lastCredUpdateTimestamp;
+        $this->userTempReputationValue = $user->userTempReputationValue;
+        $this->userTempCreditValue = $user->userTempCreditValue;
     }
 
     public static function newFromRow($row) {
         $obj = new ReptxThxUser();
         $obj->loadFromRow($row);
+        return $obj;
+    }
+
+    public static function newFromId($userId) {
+        $obj = new ReptxThxUser();
+        $obj->loadFromID($userId);
         return $obj;
     }
 
@@ -109,7 +123,9 @@ class ReptxThxUser extends AbstractModelElement {
             'user_rep_value' => $this->userReputationValue,
             'user_cred_value' => $this->userCreditValue,
             'user_last_rep_timestamp' => $this->lastRepUpdateTimestamp,
-            'user_last_cred_timestamp' => $this->lastCredUpdateTimestamp
+            'user_last_cred_timestamp' => $this->lastCredUpdateTimestamp,
+            'user_temp_rep_value' => $this->userTempReputationValue,
+            'user_temp_cred_value' => $this->userTempCreditValue
         );
         if ($this->id) {
             $data['reptxthx_user_id'] = $this->id;
@@ -180,7 +196,7 @@ class ReptxThxUser extends AbstractModelElement {
 
         return $res;
     }
-    
+
     public function updateTempCredValue($value) {
         $userMapper = new UserMapper();
         $res = $userMapper->updateTempCredValue($this->userId, $value);
@@ -188,12 +204,56 @@ class ReptxThxUser extends AbstractModelElement {
         return $res;
     }
 
-    public function getUserId() {
-        return $this->userId;
+    public static function getRepNormValue() {
+        $userMapper = new UserMapper();
+        $sqrSum = $userMapper->getRepSqrSum();
+
+        $normValue = sqrt($sqrSum);
+        return $normValue;
+    }
+
+    public static function getCredNormValue() {
+        $userMapper = new UserMapper();
+        $sqrSum = $userMapper->getCredSqrSum();
+
+        $normValue = sqrt($sqrSum);
+        return $normValue;
+    }
+
+    public function normalizeReputation($normValue) {
+        $userMapper = new UserMapper();
+        $normalizedRep = $this->userTempReputationValue / $normValue;
+        $userMapper->normalizeReputation($normalizedRep,$this->userId);
+    }
+
+    public function normalizeCredit($normValue) {
+        $userMapper = new UserMapper();
+        $normalizedCred = $this->userTempCreditValue / $normValue;
+        $userMapper->normalizeCredit($normalizedCred,$this->userId);
     }
 
     public function getId() {
         return $this->id;
+    }
+
+    public function getUserId() {
+        return $this->userId;
+    }
+
+    public function getReputationValue() {
+        return $this->userReputationValue;
+    }
+
+    public function getTempReputationValue() {
+        return $this->userTempReputationValue;
+    }
+
+    public function getCreditValue() {
+        return $this->userCreditValue;
+    }
+
+    public function getTempCreditValue() {
+        return $this->userTempCreditValue;
     }
 
 }
