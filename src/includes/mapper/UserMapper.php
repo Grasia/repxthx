@@ -104,10 +104,26 @@ class UserMapper extends AbstractMapper {
         return $res;
     }
 
+    public function updateRepValue($userId, $repVal, $timestamp) {
+        $db = $this->dbFactory->getForWrite();
+
+        $res = $db->update('reptxthx_user', array('user_rep_value' => $repVal, 'user_last_rep_timestamp' => $timestamp), array('user_id' => $userId), __METHOD__);
+
+        return $res;
+    }
+
     public function updateTempCredValue($userId, $value) {
         $db = $this->dbFactory->getForWrite();
 
         $res = $db->update('reptxthx_user', array('user_temp_cred_value' => $value), array('user_id' => $userId), __METHOD__);
+
+        return $res;
+    }
+
+    public function updateCredValue($userId, $value, $timestamp) {
+        $db = $this->dbFactory->getForWrite();
+
+        $res = $db->update('reptxthx_user', array('user_cred_value' => $value, 'user_last_rep_timestamp' => $timestamp), array('user_id' => $userId), __METHOD__);
 
         return $res;
     }
@@ -126,36 +142,32 @@ class UserMapper extends AbstractMapper {
         return $res->sqrSum;
     }
 
-    public function normalizeReputation($normalizedValue, $userId) {
-
-        $db = $this->dbFactory->getForWrite();
-
-        $res = $db->update('reptxthx_user', array('user_temp_rep_value' => $normalizedValue), array('user_id' => $userId), __METHOD__);
-
-        return $res;
-    }
-
-    public function normalizeCredit($normalizedValue, $userId) {
-
-        $db = $this->dbFactory->getForWrite();
-
-        $res = $db->update('reptxthx_user', array('user_temp_cred_value' => $normalizedValue), array('user_id' => $userId), __METHOD__);
-
-        return $res;
-    }
-
     public function getReputationAvg() {
         $db = $this->dbFactory->getForRead();
-        $res = $db->selectRow('reptxthx_user', array('repAvg' => 'avg(user_rep_value)'), '', __METHOD__);
+        $res = $db->selectRow('reptxthx_user', array('repAvg' => 'avg(user_temp_rep_value)'), '', __METHOD__);
 
         return $res->repAvg;
     }
 
     public function getCreditAvg() {
         $db = $this->dbFactory->getForRead();
-        $res = $db->selectRow('reptxthx_user', array('credAvg' => 'avg(user_cred_value)'), '', __METHOD__);
+        $res = $db->selectRow('reptxthx_user', array('credAvg' => 'avg(user_temp_cred_value)'), '', __METHOD__);
 
         return $res->credAvg;
+    }
+
+    public function getReputationSum() {
+        $db = $this->dbFactory->getForRead();
+        $res = $db->selectRow('reptxthx_user', array('repSum' => 'sum(user_temp_rep_value)'), '', __METHOD__);
+
+        return $res->repSum;
+    }
+
+    public function getCreditSum() {
+        $db = $this->dbFactory->getForRead();
+        $res = $db->selectRow('reptxthx_user', array('credSum' => 'avg(user_temp_cred_value)'), '', __METHOD__);
+
+        return $res->credSum;
     }
 
 }

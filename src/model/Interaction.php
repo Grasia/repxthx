@@ -55,7 +55,6 @@ class Interaction extends AbstractModelElement {
         $obj->page_id = $page_id;
         $obj->timestamp = wfTimestampNow();
 
-        error_log($obj);
         $obj->insert();
 
         return $obj;
@@ -116,7 +115,7 @@ class Interaction extends AbstractModelElement {
         return $obj;
     }
 
-    public static function getUserCompleteDegree($userId) {
+    public static function getUserThankDegree($userId) {
         $interactionMapper = new InteractionMapper();
         $degree = $interactionMapper->getUserDegree($userId);
 
@@ -130,9 +129,9 @@ class Interaction extends AbstractModelElement {
         return $degree;
     }
 
-    public static function getPageCompleteDegree($pageId) {
+    public static function getPageThanksDegree($pageId) {
         $interactionMapper = new InteractionMapper();
-        $degree = $interactionMapper->getPageDegree($pageId);
+        $degree = $interactionMapper->getPageThanksDegree($pageId);
 
         return $degree;
     }

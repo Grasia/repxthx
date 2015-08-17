@@ -56,3 +56,14 @@ $wgHooks['EchoEventInsertComplete'][] = 'ReptxThxHooks::onEchoEventInsertComplet
 //$wgHooks['MagicWordwgVariableIDs'][] = 'ReptxThxHooks::onRegisterMagicWords';
 //$wgHooks['ParserGetVariableValueSwitch'][] = 'ReptxThxHooks::onParserGetVariableValueSwitch';
 //$wgHooks['LoadExtensionSchemaUpdates'][] = 'ReptxThxHooks::onLoadExtensionSchemaUpdates';
+
+$giveThankWeight = 0.1;
+$receiveThankWeight = 0.8;
+
+$tetaR = 1;
+$tetaF = 1;
+$phiA = 1;
+$phiP = 1;
+$roF = 0.5;
+$roR = 1;
+$lambda = 1;

@@ -41,7 +41,6 @@ class PageMapper extends AbstractMapper {
         $row = $db->selectRow('reptxthx_page', '*', array('page_id' => $id), __METHOD__);
 
         if (!$row) {
-            error_log("reptxthx_page null");
             return null;
         }
 
@@ -75,6 +74,13 @@ class PageMapper extends AbstractMapper {
         return $res->fitnessAvg;
     }
 
+    public function getFitnessSum() {
+        $db = $this->dbFactory->getForRead();
+        $res = $db->selectRow('reptxthx_page', array('fitnessSum' => 'sum(page_fitness_value)'), '', __METHOD__);
+
+        return $res->fitnessSum;
+    }
+
     public function getFitSqrSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_page', array('sqrSum' => 'SUM(page_temp_fitness_value * page_temp_fitness_value)'), '', __METHOD__);
@@ -100,6 +106,14 @@ class PageMapper extends AbstractMapper {
         $db = $this->dbFactory->getForWrite();
 
         $res = $db->update('reptxthx_page', array('page_temp_fitness_value' => $value), array('page_id' => $pageId), __METHOD__);
+
+        return $res;
+    }
+
+    public function updateFitnessValue($pageId, $fitVal, $timestamp) {
+        $db = $this->dbFactory->getForWrite();
+
+        $res = $db->update('reptxthx_page', array('page_fitness_value' => $fitVal,'page_last_fitness_timestamp' => $timestamp), array('page_id' => $pageId), __METHOD__);
 
         return $res;
     }

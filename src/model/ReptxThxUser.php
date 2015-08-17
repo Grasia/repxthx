@@ -190,6 +190,20 @@ class ReptxThxUser extends AbstractModelElement {
         return $avgRep;
     }
 
+    public static function getReputationSum() {
+        $userMapper = new UserMapper();
+        $RepSum = $userMapper->getReputationSum();
+
+        return $RepSum;
+    }
+
+    public static function getCreditSum() {
+        $userMapper = new UserMapper();
+        $credSum = $userMapper->getCreditSum();
+
+        return $credSum;
+    }
+
     public function updateTempRepValue($value) {
         $userMapper = new UserMapper();
         $res = $userMapper->updateTempRepValue($this->userId, $value);
@@ -223,13 +237,29 @@ class ReptxThxUser extends AbstractModelElement {
     public function normalizeReputation($normValue) {
         $userMapper = new UserMapper();
         $normalizedRep = $this->userTempReputationValue / $normValue;
-        $userMapper->normalizeReputation($normalizedRep,$this->userId);
+        $userMapper->updateTempRepValue($this->userId, $normalizedRep);
     }
 
     public function normalizeCredit($normValue) {
         $userMapper = new UserMapper();
         $normalizedCred = $this->userTempCreditValue / $normValue;
-        $userMapper->normalizeCredit($normalizedCred,$this->userId);
+        $userMapper->updateTempCredValue($this->userId, $normalizedCred);
+    }
+
+    public function commitReputation() {
+        $userMapper = new UserMapper();
+
+        $now = wfTimestampNow();
+
+        $userMapper->updateRepValue($this->userId, $this->userTempReputationValue, $now);
+    }
+
+    public function commitCredit() {
+        $userMapper = new UserMapper();
+
+        $now = wfTimestampNow();
+
+        $userMapper->updateCredValue($this->userId, $this->userTempCreditValue, $now);
     }
 
     public function getId() {

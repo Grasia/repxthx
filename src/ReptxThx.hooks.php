@@ -24,8 +24,8 @@ class ReptxThxHooks {
         $dir = __DIR__;
         $baseSQLFile = "$dir/ReptxThx.sql";
 
-//        $updater->addExtensionTable('reptxthx_interaction', $baseSQLFile);
-//        $updater->addExtensionTable('reptxthx_user', $baseSQLFile);
+        $updater->addExtensionTable('reptxthx_interaction', $baseSQLFile);
+        $updater->addExtensionTable('reptxthx_user', $baseSQLFile);
         $updater->addExtensionTable('reptxthx_page', $baseSQLFile);
         
         
@@ -38,7 +38,7 @@ class ReptxThxHooks {
 
         if ($event_type == self::THANKS_EVENT_ECHO_TYPE) {
             $eventThankedUser = $event->getExtraParam("thanked-user-id");
-            $eventTitle = $event->getTitle()->getPageId();
+            $eventTitle = $event->getTitle()->getArticleId();
             $eventThankingUser = $event->getAgent()->getId();
 
             $obj = Interaction::create(self::THANKS_EVENT_TYPE_ID, $eventThankingUser, $eventThankedUser, $eventTitle);

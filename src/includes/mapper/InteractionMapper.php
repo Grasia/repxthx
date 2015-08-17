@@ -25,7 +25,7 @@ class InteractionMapper extends AbstractMapper {
         $dbw = $this->dbFactory->getForWrite();
 
         $id = $dbw->nextSequenceValue('reptxThx_interaction_id');
-        error_log($id);
+
         if ($id) {
             $row['interaction_id'] = $id;
         }
@@ -42,14 +42,12 @@ class InteractionMapper extends AbstractMapper {
 
     public function existsCreation(Interaction $interaction) {
         $db = $this->dbFactory->getForRead();
-        error_log("existsCreation");
+
         $row = $db->selectRow('reptxThx_interaction', '*', array('interaction_sender_id' => $interaction->getSender(), 'interaction_type' => 2, 'interaction_page_id' => $interaction->getPageId()), __METHOD__);
 
         if ($row == FALSE) {
-            error_log("existsCreation false");
             return FALSE;
         } else {
-            error_log("existsCreation true");
             return TRUE;
         }
     }
@@ -57,7 +55,7 @@ class InteractionMapper extends AbstractMapper {
     public function getUserDegree($userId) {
         $db = $this->dbFactory->getForRead();
 
-        $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), "interaction_sender_id = $userId OR interaction_recipient_id = $userId", __METHOD__);
+        $res = $db->selectRow('reptxThx_interaction', array('userDegree' => 'COUNT(*)'), "(interaction_sender_id = $userId OR interaction_recipient_id = $userId) AND interaction_type = 1", __METHOD__);
 
         return $res->userDegree;
     }
@@ -70,10 +68,10 @@ class InteractionMapper extends AbstractMapper {
         return $res->userDegree;
     }
 
-    public function getPageDegree($pageId) {
+    public function getPageThanksDegree($pageId) {
         $db = $this->dbFactory->getForRead();
 
-        $res = $db->selectRow('reptxThx_interaction', array('pageDegree' => 'COUNT(*)'), array('interaction_page_id' => $pageId), __METHOD__);
+        $res = $db->selectRow('reptxThx_interaction', array('pageDegree' => 'COUNT(*)'), array('interaction_page_id' => $pageId, 'interaction_type' => 2), __METHOD__);
 
         return $res->pageDegree;
     }

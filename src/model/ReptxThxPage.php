@@ -58,7 +58,6 @@ class ReptxThxPage extends AbstractModelElement {
     }
 
     public static function newFromId($page_id) {
-        error_log("page id = $page_id");
         $obj = new ReptxThxPage();
         $obj->loadFromID($page_id);
         return $obj;
@@ -129,7 +128,6 @@ class ReptxThxPage extends AbstractModelElement {
     }
 
     public static function insertNewPages() {
-        error_log("insertNewArticles");
         $articleMapper = new PageMapper();
         $newArticles = $articleMapper->getNewPages();
 
@@ -166,6 +164,19 @@ class ReptxThxPage extends AbstractModelElement {
         return $normValue;
     }
 
+    public static function getFitnessSum() {
+        $articleMapper = new PageMapper();
+        $fitnessSum = $articleMapper->getFitnessSum();
+
+        return $fitnessSum;
+    }
+
+    public function normalizeFitness($normValue) {
+        $articleMapper = new PageMapper();
+        $normalizedCred = $this->pageTempFitnessValue / $normValue;
+        $articleMapper->updateTempFitValue($this->pageId, $normalizedCred);
+    }
+
     public function updateTempFitnessValue($value) {
         $pageMapper = new PageMapper();
         $res = $pageMapper->updateTempFitValue($this->pageId, $value);
@@ -173,8 +184,12 @@ class ReptxThxPage extends AbstractModelElement {
         return $res;
     }
 
-    public function normalizeFitness($fitNormVal) {
-        
+    public function commitFitness() {
+        $pageMapper = new PageMapper();
+
+        $now = wfTimestampNow();
+
+        $pageMapper->updateFitnessValue($this->pageId, $this->pageTempFitnessValue, $now);
     }
 
     public function getPageId() {
