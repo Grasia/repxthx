@@ -159,6 +159,7 @@ class ReptxThxUser extends AbstractModelElement {
         while (!empty($newUsers)) {
             foreach ($newUsers as $user) {
                 self::create($user['user_id'], $defRepVal, $defCredVal);
+                error_log("newUser " . $user['user_id']);
             }
 
             $newUsers = $userMapper->getNewUsers();

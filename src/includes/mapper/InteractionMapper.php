@@ -174,4 +174,18 @@ class InteractionMapper extends AbstractMapper {
         return Interaction::newFromRow($row);
     }
 
+    public function getNewCreations() {
+        $data = array();
+        $db = $this->dbFactory->getForRead();
+        $limit = 250;
+
+        $res = $db->select(array('interactions' => 'reptxthx_interaction', 'revisions' => 'revision'), array('user_id' => 'revisions.rev_user','page_id' => 'revisions.rev_page'), 'interactions.interaction_sender_id IS NULL AND revisions.rev_user > 0', __METHOD__, array('LIMIT' => $limit, 'GROUP BY' => array('interactions.interaction_sender_id','revisions.rev_page')), array('interactions' => array('LEFT JOIN', 'interactions.interaction_sender_id = revisions.rev_user AND interactions.interaction_page_id = revisions.rev_page')));
+
+        for ($i = 0; $i < $res->numRows(); $i++) {
+            array_push($data, $res->fetchRow());
+        }
+
+        return $data;
+    }
+
 }

@@ -17,7 +17,8 @@ class ReptxThxHooks {
      * @return bool true in all cases
      */
     public static function initExtension() {
-        
+
+        print_r("gol");
     }
 
     public static function onLoadExtensionSchemaUpdates($updater) {
@@ -27,8 +28,9 @@ class ReptxThxHooks {
         $updater->addExtensionTable('reptxthx_interaction', $baseSQLFile);
         $updater->addExtensionTable('reptxthx_user', $baseSQLFile);
         $updater->addExtensionTable('reptxthx_page', $baseSQLFile);
-        
-        
+        $updater->addExtensionTable('reptxthx_properties', $baseSQLFile);
+
+        self::setInitialProperties();
         return true;
     }
 
@@ -42,18 +44,31 @@ class ReptxThxHooks {
             $eventThankingUser = $event->getAgent()->getId();
 
             $obj = Interaction::create(self::THANKS_EVENT_TYPE_ID, $eventThankingUser, $eventThankedUser, $eventTitle);
-            
         }
     }
-    
-    public static function onPageContentSaveComplete( $article, $user, $content, $summary, $isMinor, $isWatch, $section, $flags, $revision, $status, $baseRevId ){
-        
-        try{
-            Interaction::create(self::REV_EVENT_TYPE_ID, $user->getId(),NULL, $article->getId() );
+
+    public static function onPageContentSaveComplete($article, $user, $content, $summary, $isMinor, $isWatch, $section, $flags, $revision, $status, $baseRevId) {
+
+        try {
+            Interaction::create(self::REV_EVENT_TYPE_ID, $user->getId(), NULL, $article->getId());
         } catch (Exception $ex) {
             error_log("Error createing revision interaction");
         }
-        
     }
+
+    private function setInitialProperties() {
+
+        $interactionCount = ReptxThxProperties::getInteractionCount();
+        if ($interactionCount == '') {
+            ReptxThxProperties::insertInteractionCount(0);
+        }
+
+        $algoTimestamp = ReptxThxProperties::getLastAlgorithmTimestamp();
+        if ($algoTimestamp == '') {
+            ReptxThxProperties::insertLastAlgorithmTimestamp(0);
+        }
+    }
+
+    
 
 }

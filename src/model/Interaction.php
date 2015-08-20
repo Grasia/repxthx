@@ -57,7 +57,38 @@ class Interaction extends AbstractModelElement {
 
         $obj->insert();
 
+        self::tryInsertJob();
         return $obj;
+    }
+    
+    
+    
+    private function tryInsertJob() {
+        global $executionMinutes, $executionInteractionCount;
+
+        $interactionCurrentCount = ReptxThxProperties::getInteractionCount();
+        $interactionCurrentCount = intval($interactionCurrentCount);
+        error_log("interactionCount : $interactionCurrentCount");
+
+        ReptxThxProperties::setInteractionCount($interactionCurrentCount + 1);
+        if ($interactionCurrentCount >= $executionInteractionCount) {
+            error_log("interactionCurrentCount more than configured value");
+            
+            $queue = JobQueueGroup::singleton();
+            $algorithmJobSize = $queue->get('executeReptxThxAlgorithm')->getSize();
+            
+            if ($algorithmJobSize == 0) {
+                error_log("empty queue");
+                print_r("insertJob");
+                $jobParams = array();
+                $title = Title::newMainPage();
+
+                $job = new ReptxThxAlgorithmJob($title, $jobParams);
+
+                $queue->push($job);
+                error_log("job inserted");
+            }
+        }
     }
 
     public function toDbArray() {
@@ -142,8 +173,7 @@ class Interaction extends AbstractModelElement {
 
         return $degree;
     }
-    
-    
+
     public static function getPageCreatingUsers($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -154,9 +184,8 @@ class Interaction extends AbstractModelElement {
             array_push($data, $user);
         }
         return $data;
-       
     }
-    
+
     public static function getPageThanksReceived($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -169,7 +198,7 @@ class Interaction extends AbstractModelElement {
         }
         return $data;
     }
-    
+
     public static function getPageThanksGiven($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -221,6 +250,32 @@ class Interaction extends AbstractModelElement {
         }
         return $data;
     }
+
+    public static function insertNewPageCreations() {
+        $interactionMapper = new InteractionMapper();
+        $newInteractions = $interactionMapper->getNewCreations();
+
+        while (!empty($newInteractions)) {
+            foreach ($newInteractions as $interaction) {
+                self::create(2, $interaction['user_id'], null, $interaction['page_id']);
+            }
+
+            $newInteractions = $interactionMapper->getNewCreations();
+        }
+    }
+    
+//    public static function insertInitialThanks() {
+//        $interactionMapper = new InteractionMapper();
+//        $newInteractions = $interactionMapper->getNewCreations();
+//
+//        while (!empty($newInteractions)) {
+//            foreach ($newInteractions as $interaction) {
+//                self::create(2, $interaction['user_id'], null, $interaction['page_id']);
+//            }
+//
+//            $newInteractions = $interactionMapper->getNewCreations();
+//        }
+//    }
 
     public function getId() {
         return $this->id;

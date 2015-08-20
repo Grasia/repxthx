@@ -33,3 +33,10 @@ CREATE TABLE /*_*/reptxthx_page (
 ) /*$wgDBTableOptions*/;
 
 CREATE INDEX /*i*/reptxthx_page_pageId on /*_*/reptxthx_page (page_id);
+
+CREATE TABLE /*_*/reptxthx_properties (
+	reptxthx_prop_id int unsigned not null primary key auto_increment,
+	reptxthx_prop_key varbinary(32) not null,
+	reptxthx_prop_val varbinary(32) not null
+) /*$wgDBTableOptions*/;
+

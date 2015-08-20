@@ -27,7 +27,7 @@ class SpecialReptxThx extends SpecialPage {
 
         $out = $this->getOutput();
 
-        $out->setPageTitle($this->msg('example-helloworld'));
+//        $out->setPageTitle($this->msg('example-helloworld'));
 
         // Parses message from .i18n.php as wikitext and adds it to the
         // page output.
@@ -37,9 +37,14 @@ class SpecialReptxThx extends SpecialPage {
 //        $arr = Interaction::getUserThanksGiven(1);
 //        getUserThanksReceived($userId)
 //        print_r($arr);
-        
-        ReptxThxAlgorithm::execute();
 //        $out->addWikiMsg((string) $i);
+
+        $jobParams = array();
+        $title = Title::newMainPage();
+
+        $job = new ReptxThxAlgorithmJob($title, $jobParams);
+
+        JobQueueGroup::singleton()->push($job);
     }
 
     protected function getGroupName() {

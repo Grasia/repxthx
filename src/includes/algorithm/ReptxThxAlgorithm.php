@@ -8,21 +8,11 @@
 
 class ReptxThxAlgorithm {
 
-    private function stallCondition() {
-        return true;
-    }
-
-    private function insertNewUsers() {
-        ReptxThxUser::insertNewUsers();
-    }
-
-    private function insertNewPages() {
-        ReptxThxUser::insertNewUsers();
-    }
-
     public static function execute() {
+        ReptxThxProperties::setInteractionCount(0);
         ReptxThxUser::insertNewUsers();
-        ReptxThxUser::insertNewUsers();
+        ReptxThxPage::insertNewPages();
+        Interaction::insertNewPageCreations();
 
         $Rn = 0;
         $An = 0;
@@ -133,8 +123,13 @@ class ReptxThxAlgorithm {
         while (!empty($userArray)) {
 
             foreach ($userArray as $user) {
-                $user->normalizeReputation($repNormVal);
-                $user->normalizeCredit($credNormVal);
+                if($repNormVal > 0){
+                    $user->normalizeReputation($repNormVal);
+                }
+                if($credNormVal > 0){
+                    $user->normalizeCredit($credNormVal);;
+                }
+                
             }
 
             $userArray = ReptxThxUser::getUsersChunk($last);

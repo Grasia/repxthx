@@ -35,6 +35,7 @@ $wgAutoloadClasses['InteractionMapper'] = $dir . '/includes/mapper/InteractionMa
 $wgAutoloadClasses['AbstractMapper'] = $dir . '/includes/mapper/AbstractMapper.php';
 $wgAutoloadClasses['UserMapper'] = $dir . '/includes/mapper/UserMapper.php';
 $wgAutoloadClasses['PageMapper'] = $dir . '/includes/mapper/PageMapper.php';
+$wgAutoloadClasses['PropertiesMapper'] = $dir . '/includes/mapper/PropertiesMapper.php';
 
 $wgAutoloadClasses['AbstractModelElement'] = $dir . '/model/AbstractModelElement.php';
 $wgAutoloadClasses['Interaction'] = $dir . '/model/Interaction.php';
@@ -42,6 +43,12 @@ $wgAutoloadClasses['ReptxThxUser'] = $dir . '/model/ReptxThxUser.php';
 $wgAutoloadClasses['ReptxThxPage'] = $dir . '/model/ReptxThxPage.php';
 
 $wgAutoloadClasses['ReptxThxAlgorithm'] = $dir . '/includes/algorithm/ReptxThxAlgorithm.php';
+
+$wgAutoloadClasses['ReptxThxAlgorithmJob'] = $dir . '/jobs/ReptxThxAlgorithmJob.php';
+
+$wgAutoloadClasses['ReptxThxProperties'] = $dir . '/includes/ReptxThxProperties.php';
+$wgAutoloadClasses['ApiQueryReptxThx'] = $dir . '/api/ApiQueryReptxThx.php';
+
 
 //// Register hooks
 //// See also http://www.mediawiki.org/wiki/Manual:Hooks
@@ -52,10 +59,19 @@ $wgHooks['PageContentSaveComplete'][] = 'ReptxThxHooks::onPageContentSaveComplet
 //Hook which launches whenever an echo event is created and passes the event object as argument
 $wgHooks['EchoEventInsertComplete'][] = 'ReptxThxHooks::onEchoEventInsertComplete';
 
+// Extension initialization
+//$wgExtensionFunctions[] = 'ReptxThxHooks::initExtension';
+
+$wgJobClasses['executeReptxThxAlgorithm'] = 'ReptxThxAlgorithmJob';
+
+$wgAPIListModules['reptxthx'] = 'ApiQueryReptxThx';
 //$wgHooks['ParserFirstCallInit'][] = 'ReptxThxHooks::onParserFirstCallInit';
 //$wgHooks['MagicWordwgVariableIDs'][] = 'ReptxThxHooks::onRegisterMagicWords';
 //$wgHooks['ParserGetVariableValueSwitch'][] = 'ReptxThxHooks::onParserGetVariableValueSwitch';
 //$wgHooks['LoadExtensionSchemaUpdates'][] = 'ReptxThxHooks::onLoadExtensionSchemaUpdates';
+
+$executionMinutes = 1;
+$executionInteractionCount = 1;
 
 $giveThankWeight = 0.1;
 $receiveThankWeight = 0.8;
