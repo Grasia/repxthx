@@ -18,7 +18,14 @@ class ReptxThxUser extends AbstractModelElement {
     protected $lastCredUpdateTimestamp;
 
     protected function __construct() {
-        
+        $this->id = null;
+        $this->userId = null;
+        $this->userReputationValue = null;
+        $this->userCreditValue = null;
+        $this->userTempReputationValue = null;
+        $this->userTempCreditValue = null;
+        $this->lastRepUpdateTimestamp = null;
+        $this->lastCredUpdateTimestamp = null;
     }
 
     function __toString() {
@@ -79,16 +86,18 @@ class ReptxThxUser extends AbstractModelElement {
     }
 
     public function loadFromRow($row) {
-        $this->id = $row->reptxthx_user_id;
-        $this->userId = $row->user_id;
+        if ($row) {
+            $this->id = $row->reptxthx_user_id;
+            $this->userId = $row->user_id;
 
-        $this->userReputationValue = $row->user_rep_value;
-        $this->userCreditValue = $row->user_cred_value;
-        $this->lastRepUpdateTimestamp = $row->user_last_rep_timestamp;
-        $this->lastCredUpdateTimestamp = $row->user_last_cred_timestamp;
+            $this->userReputationValue = $row->user_rep_value;
+            $this->userCreditValue = $row->user_cred_value;
+            $this->lastRepUpdateTimestamp = $row->user_last_rep_timestamp;
+            $this->lastCredUpdateTimestamp = $row->user_last_cred_timestamp;
 
-        $this->userTempReputationValue = $row->user_temp_rep_value;
-        $this->userTempCreditValue = $row->user_temp_cred_value;
+            $this->userTempReputationValue = $row->user_temp_rep_value;
+            $this->userTempCreditValue = $row->user_temp_cred_value;
+        }
     }
 
     public function loadFromID($id) {
@@ -285,6 +294,14 @@ class ReptxThxUser extends AbstractModelElement {
 
     public function getTempCreditValue() {
         return $this->userTempCreditValue;
+    }
+
+    public function getRepLastUpdatedTimestamp() {
+        return $this->lastRepUpdateTimestamp;
+    }
+
+    public function getCredLastUpdatedTimestamp() {
+        return $this->lastCredUpdateTimestamp;
     }
 
 }

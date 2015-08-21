@@ -207,5 +207,9 @@ class ReptxThxPage extends AbstractModelElement {
     public function getTempFitness() {
         return $this->pageTempFitnessValue;
     }
+    
+    public function getLastFitnessUpdateTimestamp() {
+        return $this->lastFitnessUpdateTimestamp;
+    }
 
 }

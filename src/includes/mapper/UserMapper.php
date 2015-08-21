@@ -50,10 +50,6 @@ class UserMapper extends AbstractMapper {
 
         $row = $db->selectRow('reptxThx_user', '*', array('user_id' => $id), __METHOD__);
 
-        if (!$row) {
-            throw new MWException("No Users found with ID: $id");
-        }
-
         return ReptxThxUser::newFromRow($row);
     }
 

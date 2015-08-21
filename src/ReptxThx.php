@@ -47,7 +47,8 @@ $wgAutoloadClasses['ReptxThxAlgorithm'] = $dir . '/includes/algorithm/ReptxThxAl
 $wgAutoloadClasses['ReptxThxAlgorithmJob'] = $dir . '/jobs/ReptxThxAlgorithmJob.php';
 
 $wgAutoloadClasses['ReptxThxProperties'] = $dir . '/includes/ReptxThxProperties.php';
-$wgAutoloadClasses['ApiQueryReptxThx'] = $dir . '/api/ApiQueryReptxThx.php';
+$wgAutoloadClasses['ApiQueryReptxThxUser'] = $dir . '/api/ApiQueryReptxThxUser.php';
+$wgAutoloadClasses['ApiQueryReptxThxPage'] = $dir . '/api/ApiQueryReptxThxPage.php';
 
 
 //// Register hooks
@@ -64,7 +65,8 @@ $wgHooks['EchoEventInsertComplete'][] = 'ReptxThxHooks::onEchoEventInsertComplet
 
 $wgJobClasses['executeReptxThxAlgorithm'] = 'ReptxThxAlgorithmJob';
 
-$wgAPIListModules['reptxthx'] = 'ApiQueryReptxThx';
+$wgAPIListModules['reptxthxuser'] = 'ApiQueryReptxThxUser';
+$wgAPIListModules['reptxthxpage'] = 'ApiQueryReptxThxPage';
 //$wgHooks['ParserFirstCallInit'][] = 'ReptxThxHooks::onParserFirstCallInit';
 //$wgHooks['MagicWordwgVariableIDs'][] = 'ReptxThxHooks::onRegisterMagicWords';
 //$wgHooks['ParserGetVariableValueSwitch'][] = 'ReptxThxHooks::onParserGetVariableValueSwitch';
