@@ -18,7 +18,7 @@ class ReptxThxHooks {
      */
     public static function initExtension() {
 
-        print_r("gol");
+//        print_r("gol");
     }
 
     public static function onLoadExtensionSchemaUpdates($updater) {
@@ -69,6 +69,48 @@ class ReptxThxHooks {
         }
     }
 
+    function onParserSetup(&$parser) {
+
+        $parser->setFunctionHook('rept', 'ReptxThxHooks::renderRept');
+        $parser->setFunctionHook('cred', 'ReptxThxHooks::renderCred');
+    }
+
+    function renderRept($parser, $userName = '') {
+
+        $parser->disableCache();
+        $userId = User::idFromName($userName);
+        if (isset($userName) && $userId !== null) {
+            
+            $user = ReptxThxUser::newFromId($userId);
+            $rept = $user !== null ? $user->getReputationValue() : null;
+
+            $output = $rept === null ? "" : "$userName's reputation value is $rept";
+        } else {
+            $output = "";
+        }
+
+        return $output;
+    }
     
+    function renderCred($parser, $userName = '') {
+
+        $parser->disableCache();
+        error_log($userName);
+        $userId = User::idFromName($userName);
+        error_log($userId);
+        if (isset($userName) && $userId !== null) {
+            
+            $user = ReptxThxUser::newFromId($userId);
+            error_log($user);
+            $cred = $user !== null ? $user->getCreditValue() : null;
+
+            $output = $cred === null ? "" : "$userName's credit value is $cred";
+        } else {
+            $output = "";
+        }
+
+        return $output;
+    }
+
 
 }

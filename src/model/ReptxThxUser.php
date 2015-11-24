@@ -37,6 +37,17 @@ class ReptxThxUser extends AbstractModelElement {
                 . "lastCredUpdateTimestamp={$this->lastCredUpdateTimestamp})";
     }
 
+    /**
+     * Creates a new user
+     * @param type $userId
+     * @param type $userReputationValue
+     * @param type $userCreditValue
+     * @param type $lastRepUpdateTimestamp
+     * @param type $lastCredUpdateTimestamp
+     * @return \ReptxThxUser
+     * @throws ReadOnlyError
+     * @throws MWException
+     */
     public static function create($userId, $userReputationValue, $userCreditValue, $lastRepUpdateTimestamp = "", $lastCredUpdateTimestamp = "") {
         if (wfReadOnly()) {
             throw new ReadOnlyError();
@@ -80,11 +91,19 @@ class ReptxThxUser extends AbstractModelElement {
         return $obj;
     }
 
+    /**
+     * Inserts a user into database
+     * @return type
+     */
     protected function insert() {
         $userMapper = new UserMapper();
         return $userMapper->insert($this);
     }
 
+    /**
+     * loads a user given a db row
+     * @param type $row
+     */
     public function loadFromRow($row) {
         if ($row) {
             $this->id = $row->reptxthx_user_id;
@@ -100,6 +119,10 @@ class ReptxThxUser extends AbstractModelElement {
         }
     }
 
+    /**
+     * loads a user given an userId
+     * @param type $id
+     */
     public function loadFromID($id) {
         $userMapper = new UserMapper();
         $user = $userMapper->getByUserId($id);
@@ -114,18 +137,32 @@ class ReptxThxUser extends AbstractModelElement {
         $this->userTempCreditValue = $user->userTempCreditValue;
     }
 
+    /**
+     * Returns a new user given a db row
+     * @param type $row
+     * @return \ReptxThxUser
+     */
     public static function newFromRow($row) {
         $obj = new ReptxThxUser();
         $obj->loadFromRow($row);
         return $obj;
     }
 
+    /**
+     * Returns a new user given its userID
+     * @param type $userId
+     * @return \ReptxThxUser
+     */
     public static function newFromId($userId) {
         $obj = new ReptxThxUser();
         $obj->loadFromID($userId);
         return $obj;
     }
 
+    /**
+     * Convert an entity's property to array
+     * @return type
+     */
     public function toDbArray() {
         $data = array(
             'user_id' => $this->userId,
@@ -143,6 +180,12 @@ class ReptxThxUser extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Returns 250 user objects which reptxthx_user_id is
+     * more than $last 
+     * @param type $last
+     * @return array
+     */
     public static function getUsersChunk(&$last) {
 
         $data = array();
@@ -159,6 +202,9 @@ class ReptxThxUser extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Inserts all user that are not inserted into reptxthx db tables
+     */
     public static function insertNewUsers() {
         $userMapper = new UserMapper();
         $newUsers = $userMapper->getNewUsers();
@@ -175,6 +221,10 @@ class ReptxThxUser extends AbstractModelElement {
         }
     }
 
+    /**
+     * Returns the default reputation value for new inserted users
+     * @return type
+     */
     public static function getDefaultReputationValue() {
         $userMapper = new UserMapper();
         $numUsers = $userMapper->getWikiUsersNumber();
@@ -182,10 +232,18 @@ class ReptxThxUser extends AbstractModelElement {
         return 1 / sqrt($numUsers);
     }
 
+    /**
+     * Returns the default credit value for new inserted users
+     * @return int
+     */
     public static function getDefaultCreditValue() {
         return 0;
     }
 
+    /**
+     * Returns reputation average
+     * @return type
+     */
     public static function getReputationAvg() {
         $userMapper = new UserMapper();
         $avgRep = $userMapper->getReputationAvg();
@@ -193,6 +251,10 @@ class ReptxThxUser extends AbstractModelElement {
         return $avgRep;
     }
 
+    /**
+     * Returns creadit average
+     * @return type
+     */
     public static function getCreditAvg() {
         $userMapper = new UserMapper();
         $avgRep = $userMapper->getCreditAvg();
@@ -200,6 +262,10 @@ class ReptxThxUser extends AbstractModelElement {
         return $avgRep;
     }
 
+    /**
+     * Returns reputation sum
+     * @return type
+     */
     public static function getReputationSum() {
         $userMapper = new UserMapper();
         $RepSum = $userMapper->getReputationSum();
@@ -207,6 +273,10 @@ class ReptxThxUser extends AbstractModelElement {
         return $RepSum;
     }
 
+    /**
+     * Returns credit sum
+     * @return type
+     */
     public static function getCreditSum() {
         $userMapper = new UserMapper();
         $credSum = $userMapper->getCreditSum();
@@ -214,6 +284,11 @@ class ReptxThxUser extends AbstractModelElement {
         return $credSum;
     }
 
+    /**
+     * Updates temporary reputation value
+     * @param type $value
+     * @return type
+     */
     public function updateTempRepValue($value) {
         $userMapper = new UserMapper();
         $res = $userMapper->updateTempRepValue($this->userId, $value);
@@ -221,6 +296,11 @@ class ReptxThxUser extends AbstractModelElement {
         return $res;
     }
 
+    /**
+     * Updates temporary credit value
+     * @param type $value
+     * @return type
+     */
     public function updateTempCredValue($value) {
         $userMapper = new UserMapper();
         $res = $userMapper->updateTempCredValue($this->userId, $value);
@@ -228,6 +308,10 @@ class ReptxThxUser extends AbstractModelElement {
         return $res;
     }
 
+    /**
+     * Returns a value used for normalization of reputation
+     * @return type
+     */
     public static function getRepNormValue() {
         $userMapper = new UserMapper();
         $sqrSum = $userMapper->getRepSqrSum();
@@ -236,6 +320,10 @@ class ReptxThxUser extends AbstractModelElement {
         return $normValue;
     }
 
+    /**
+     * Returns a value used for normalization of credit
+     * @return type
+     */
     public static function getCredNormValue() {
         $userMapper = new UserMapper();
         $sqrSum = $userMapper->getCredSqrSum();
@@ -244,18 +332,29 @@ class ReptxThxUser extends AbstractModelElement {
         return $normValue;
     }
 
+    /**
+     * Normalizes reputation values
+     * @param type $normValue
+     */
     public function normalizeReputation($normValue) {
         $userMapper = new UserMapper();
         $normalizedRep = $this->userTempReputationValue / $normValue;
         $userMapper->updateTempRepValue($this->userId, $normalizedRep);
     }
 
+    /**
+     * Normalizes credit values
+     * @param type $normValue
+     */
     public function normalizeCredit($normValue) {
         $userMapper = new UserMapper();
         $normalizedCred = $this->userTempCreditValue / $normValue;
         $userMapper->updateTempCredValue($this->userId, $normalizedCred);
     }
 
+    /**
+     * Copies temporary reputation value into reputation column
+     */
     public function commitReputation() {
         $userMapper = new UserMapper();
 
@@ -264,6 +363,9 @@ class ReptxThxUser extends AbstractModelElement {
         $userMapper->updateRepValue($this->userId, $this->userTempReputationValue, $now);
     }
 
+    /**
+     * Copies credit reputation value into credit column
+     */
     public function commitCredit() {
         $userMapper = new UserMapper();
 

@@ -1,11 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class Interaction extends AbstractModelElement {
 
     protected $id = null;
@@ -28,6 +22,16 @@ class Interaction extends AbstractModelElement {
                 . "timestamp={$this->timestamp})";
     }
 
+    /**
+     * Creates a new interaction.
+     * @param type $type
+     * @param type $sender
+     * @param type $recipient
+     * @param type $page_id
+     * @return \Interaction
+     * @throws ReadOnlyError
+     * @throws MWException
+     */
     public static function create($type, $sender, $recipient, $page_id) {
 
         if (wfReadOnly()) {
@@ -60,9 +64,12 @@ class Interaction extends AbstractModelElement {
         self::tryInsertJob();
         return $obj;
     }
-    
-    
-    
+
+    /**
+     * Inserts a new job for reptxthx algorithm execution
+     * @global type $executionMinutes
+     * @global type $executionInteractionCount
+     */
     private function tryInsertJob() {
         global $executionMinutes, $executionInteractionCount;
 
@@ -73,10 +80,10 @@ class Interaction extends AbstractModelElement {
         ReptxThxProperties::setInteractionCount($interactionCurrentCount + 1);
         if ($interactionCurrentCount >= $executionInteractionCount) {
             error_log("interactionCurrentCount more than configured value");
-            
+
             $queue = JobQueueGroup::singleton();
             $algorithmJobSize = $queue->get('executeReptxThxAlgorithm')->getSize();
-            
+
             if ($algorithmJobSize == 0) {
                 error_log("empty queue");
                 print_r("insertJob");
@@ -91,6 +98,10 @@ class Interaction extends AbstractModelElement {
         }
     }
 
+    /**
+     * Convert an entity's property to array
+     * @return type
+     */
     public function toDbArray() {
 
         $data = array(
@@ -107,11 +118,19 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Inserts new interaction into db
+     * @return type
+     */
     protected function insert() {
         $interactionMapper = new InteractionMapper();
         return $interactionMapper->insert($this);
     }
 
+    /**
+     * loads an interation given a db row
+     * @param type $row
+     */
     public function loadFromRow($row) {
         $this->id = $row->interaction_id;
         $this->type = $row->interaction_type;
@@ -122,6 +141,10 @@ class Interaction extends AbstractModelElement {
         $this->timestamp = $row->interaction_timestamp;
     }
 
+    /**
+     * loads an interaction given an id
+     * @param type $id
+     */
     public function loadFromID($id) {
         $interactionMapper = new InteractionMapper();
         $interaction = $interactionMapper->getById($id);
@@ -134,18 +157,33 @@ class Interaction extends AbstractModelElement {
         $this->timestamp = $interaction->timestamp;
     }
 
+    /**
+     * Returns new interaction given a db row
+     * @param type $row
+     * @return \Interaction
+     */
     public static function newFromRow($row) {
         $obj = new Interaction();
         $obj->loadFromRow($row);
         return $obj;
     }
 
+    /**
+     * Returns new interaction given an id
+     * @param type $id
+     * @return \Interaction
+     */
     public static function newFromID($id) {
         $obj = new Interaction();
         $obj->loadFromID($id);
         return $obj;
     }
 
+    /**
+     * Returns the sum of given and received 
+     * @param type $userId
+     * @return type
+     */
     public static function getUserThankDegree($userId) {
         $interactionMapper = new InteractionMapper();
         $degree = $interactionMapper->getUserDegree($userId);
@@ -153,6 +191,11 @@ class Interaction extends AbstractModelElement {
         return $degree;
     }
 
+    /**
+     * Returns the number of pages a user created or revised 
+     * @param type $userId
+     * @return type
+     */
     public static function getUserCreationDegree($userId) {
         $interactionMapper = new InteractionMapper();
         $degree = $interactionMapper->getUserCreationDegree($userId);
@@ -160,6 +203,11 @@ class Interaction extends AbstractModelElement {
         return $degree;
     }
 
+    /**
+     * Returns the number of thanks given through a given page
+     * @param type $pageId
+     * @return type
+     */
     public static function getPageThanksDegree($pageId) {
         $interactionMapper = new InteractionMapper();
         $degree = $interactionMapper->getPageThanksDegree($pageId);
@@ -167,6 +215,11 @@ class Interaction extends AbstractModelElement {
         return $degree;
     }
 
+    /**
+     * Returns the number of user that created of revised a given page
+     * @param type $pageId
+     * @return type
+     */
     public static function getPageCretionDegree($pageId) {
         $interactionMapper = new InteractionMapper();
         $degree = $interactionMapper->getPageCreationDegree($pageId);
@@ -174,6 +227,11 @@ class Interaction extends AbstractModelElement {
         return $degree;
     }
 
+    /**
+     * Returns an array with all the users that created page
+     * @param type $pageId
+     * @return array
+     */
     public static function getPageCreatingUsers($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -186,6 +244,12 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Returns an array with the all the users that received a thank
+     * through a given page
+     * @param type $pageId
+     * @return array
+     */
     public static function getPageThanksReceived($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -199,6 +263,12 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Returns an array with the all the users that gave a thank through 
+     * a given page
+     * @param type $pageId
+     * @return array
+     */
     public static function getPageThanksGiven($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -212,6 +282,11 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Returns an array with the all the pages created or  by a user
+     * @param type $userId
+     * @return array
+     */
     public static function getUserCreatedArticles($userId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -225,6 +300,11 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Returns an array with the pageId of all the pages through a user
+     * @param type $pageId
+     * @return array
+     */
     public static function getUserThanksReceived($pageId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -238,6 +318,12 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Returns an array with all the pages through a user
+     * gave thanks. 
+     * @param type $userId
+     * @return array
+     */
     public static function getUserThanksGiven($userId) {
         $data = array();
         $interactionMapper = new InteractionMapper();
@@ -251,6 +337,10 @@ class Interaction extends AbstractModelElement {
         return $data;
     }
 
+    /**
+     * Gets all the revisions and creations of pages not inserted into
+     * reptxthx db tables
+     */
     public static function insertNewPageCreations() {
         $interactionMapper = new InteractionMapper();
         $newInteractions = $interactionMapper->getNewCreations();
@@ -263,19 +353,6 @@ class Interaction extends AbstractModelElement {
             $newInteractions = $interactionMapper->getNewCreations();
         }
     }
-    
-//    public static function insertInitialThanks() {
-//        $interactionMapper = new InteractionMapper();
-//        $newInteractions = $interactionMapper->getNewCreations();
-//
-//        while (!empty($newInteractions)) {
-//            foreach ($newInteractions as $interaction) {
-//                self::create(2, $interaction['user_id'], null, $interaction['page_id']);
-//            }
-//
-//            $newInteractions = $interactionMapper->getNewCreations();
-//        }
-//    }
 
     public function getId() {
         return $this->id;

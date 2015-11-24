@@ -8,15 +8,8 @@
 
 abstract class AbstractMapper {
 
-    /**
-     * Echo database factory
-     * @var MWEchoDbFactory
-     */
     protected $dbFactory;
 
-    /**
-     * @param MWEchoDbFactory|null
-     */
     public function __construct(DbFactory $dbFactory = null) {
         if ($dbFactory === null) {
             $dbFactory = new DbFactory();

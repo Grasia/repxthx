@@ -1,18 +1,11 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class PageMapper extends AbstractMapper {
 
     /**
-     * Insert an event record
-     *
-     * @param EchoEvent
-     * @return int|bool
+     * Inserts a new page
+     * @param ReptxThxPage $page
+     * @return boolean
      */
     public function insert(ReptxThxPage $page) {
         $dbw = $this->dbFactory->getForWrite();
@@ -34,6 +27,11 @@ class PageMapper extends AbstractMapper {
         }
     }
 
+    /**
+     * gets a page given a pageId
+     * @param type $id
+     * @return type
+     */
     public function getById($id) {
 
         $db = $this->dbFactory->getForRead();
@@ -47,6 +45,12 @@ class PageMapper extends AbstractMapper {
         return ReptxThxPage::newFromRow($row);
     }
 
+    /**
+     * Gets the $limit first pages ordered by reptxThx_page_id
+     * @param type $limit
+     * @param type $last
+     * @return array
+     */
     public function getPagesArray($limit, $last) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -60,13 +64,21 @@ class PageMapper extends AbstractMapper {
         return $data;
     }
 
-    public function getWikiArticleNumber() {
+    /**
+     * Returns the number of pages
+     * @return type
+     */
+    public function getWikPageNumber() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('page', array('numArticles' => 'COUNT(*)'), '', __METHOD__);
 
         return $res->numArticles;
     }
 
+    /**
+     * Returns the fitness average
+     * @return type
+     */
     public function getFitnessAvg() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_page', array('fitnessAvg' => 'avg(page_fitness_value)'), '', __METHOD__);
@@ -74,6 +86,10 @@ class PageMapper extends AbstractMapper {
         return $res->fitnessAvg;
     }
 
+    /**
+     * Returns the fitness sum
+     * @return type
+     */
     public function getFitnessSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_page', array('fitnessSum' => 'sum(page_fitness_value)'), '', __METHOD__);
@@ -81,6 +97,10 @@ class PageMapper extends AbstractMapper {
         return $res->fitnessSum;
     }
 
+    /**
+     * Returns the sum of the squered fitness value
+     * @return type
+     */
     public function getFitSqrSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_page', array('sqrSum' => 'SUM(page_temp_fitness_value * page_temp_fitness_value)'), '', __METHOD__);
@@ -88,6 +108,11 @@ class PageMapper extends AbstractMapper {
         return $res->sqrSum;
     }
 
+    /**
+     * Returns an array with all the pages not inserted into
+     * reptxths tables.
+     * @return array
+     */
     public function getNewPages() {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -102,6 +127,12 @@ class PageMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Updates temporary fitness value 
+     * @param type $pageId
+     * @param type $value
+     * @return type
+     */
     public function updateTempFitValue($pageId, $value) {
         $db = $this->dbFactory->getForWrite();
 
@@ -110,6 +141,13 @@ class PageMapper extends AbstractMapper {
         return $res;
     }
 
+    /**
+     * Updates fitness value
+     * @param type $pageId
+     * @param type $fitVal
+     * @param type $timestamp
+     * @return type
+     */
     public function updateFitnessValue($pageId, $fitVal, $timestamp) {
         $db = $this->dbFactory->getForWrite();
 

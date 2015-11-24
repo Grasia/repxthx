@@ -1,21 +1,13 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class InteractionMapper extends AbstractMapper {
 
     /**
-     * Insert an event record
-     *
-     * @param EchoEvent
-     * @return int|bool
+     * Inserts a new interaction object into database
+     * 
+     * @param Interaction $interaction
+     * @return boolean
      */
-    const INTERACTION_TABLE_NAME = 'reptxThx_interaction';
-
     public function insert(Interaction $interaction) {
 
         if ($interaction->getType() == 2 && self::existsCreation($interaction)) {
@@ -40,6 +32,12 @@ class InteractionMapper extends AbstractMapper {
         }
     }
 
+    /**
+     * Checks if an interaction of page creation or revision already exists.
+     * 
+     * @param Interaction $interaction
+     * @return boolean
+     */
     public function existsCreation(Interaction $interaction) {
         $db = $this->dbFactory->getForRead();
 
@@ -52,6 +50,12 @@ class InteractionMapper extends AbstractMapper {
         }
     }
 
+    
+    /**
+     * Returns the sum of thanks given and received by a given user
+     * @param type $userId
+     * @return type
+     */
     public function getUserDegree($userId) {
         $db = $this->dbFactory->getForRead();
 
@@ -60,6 +64,11 @@ class InteractionMapper extends AbstractMapper {
         return $res->userDegree;
     }
 
+    /**
+     * Returns the number of pages a user created or revised 
+     * @param type $userId
+     * @return type
+     */
     public function getUserCreationDegree($userId) {
         $db = $this->dbFactory->getForRead();
 
@@ -68,6 +77,11 @@ class InteractionMapper extends AbstractMapper {
         return $res->userDegree;
     }
 
+    /**
+     * Returns the number of thanks given through a given page
+     * @param type $pageId
+     * @return type
+     */
     public function getPageThanksDegree($pageId) {
         $db = $this->dbFactory->getForRead();
 
@@ -76,6 +90,11 @@ class InteractionMapper extends AbstractMapper {
         return $res->pageDegree;
     }
 
+    /**
+     * Returns the number of user that created of revised a given page
+     * @param type $pageId
+     * @return type
+     */
     public function getPageCreationDegree($pageId) {
         $db = $this->dbFactory->getForRead();
 
@@ -84,6 +103,12 @@ class InteractionMapper extends AbstractMapper {
         return $res->pageDegree;
     }
 
+    /**
+     * Returns an array with the pageId of all the pages created or revised
+     * by a given user.
+     * @param type $userId
+     * @return array
+     */
     public function getUserCreatedPages($userId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -97,6 +122,12 @@ class InteractionMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Returns an array with the pageId of all the pages through a user
+     * received thanks.
+     * @param type $userId
+     * @return array
+     */
     public function getUserThanksReceived($userId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -110,6 +141,12 @@ class InteractionMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Returns an array with the pageId of all the pages through a user
+     * gave thanks.
+     * @param type $userId
+     * @return array
+     */
     public function getUserThanksGiven($userId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -123,6 +160,12 @@ class InteractionMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Returns an array with the userId of all the users that created
+     * or revised a given page
+     * @param type $pageId
+     * @return array
+     */
     public function getPageCreatingUser($pageId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -135,7 +178,13 @@ class InteractionMapper extends AbstractMapper {
 
         return $data;
     }
-
+    
+    /**
+     * Returns an array with the userId of all the users that received
+     * a thank through a given page
+     * @param type $pageId
+     * @return array
+     */
     public function getPageThanksReceived($pageId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -149,6 +198,12 @@ class InteractionMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Returns an array with the userId of all the users that gave
+     * a thank through a given page
+     * @param type $pageId
+     * @return array
+     */
     public function getPageThanksGiven($pageId) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -162,6 +217,12 @@ class InteractionMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Gets an interaction by its interaction_id
+     * @param type $id
+     * @return type
+     * @throws MWException
+     */
     public function getById($id) {
         $db = $this->dbFactory->getForRead(DB_MASTER);
 
@@ -174,12 +235,17 @@ class InteractionMapper extends AbstractMapper {
         return Interaction::newFromRow($row);
     }
 
+    /**
+     * Gets all the revisions and creations of pages not inserted into
+     * reptxthx db tables
+     * @return array
+     */
     public function getNewCreations() {
         $data = array();
         $db = $this->dbFactory->getForRead();
         $limit = 250;
 
-        $res = $db->select(array('interactions' => 'reptxthx_interaction', 'revisions' => 'revision'), array('user_id' => 'revisions.rev_user','page_id' => 'revisions.rev_page'), 'interactions.interaction_sender_id IS NULL AND revisions.rev_user > 0', __METHOD__, array('LIMIT' => $limit, 'GROUP BY' => array('interactions.interaction_sender_id','revisions.rev_page')), array('interactions' => array('LEFT JOIN', 'interactions.interaction_sender_id = revisions.rev_user AND interactions.interaction_page_id = revisions.rev_page')));
+        $res = $db->select(array('interactions' => 'reptxthx_interaction', 'revisions' => 'revision'), array('user_id' => 'revisions.rev_user', 'page_id' => 'revisions.rev_page'), 'interactions.interaction_sender_id IS NULL AND revisions.rev_user > 0', __METHOD__, array('LIMIT' => $limit, 'GROUP BY' => array('interactions.interaction_sender_id', 'revisions.rev_page')), array('interactions' => array('LEFT JOIN', 'interactions.interaction_sender_id = revisions.rev_user AND interactions.interaction_page_id = revisions.rev_page')));
 
         for ($i = 0; $i < $res->numRows(); $i++) {
             array_push($data, $res->fetchRow());

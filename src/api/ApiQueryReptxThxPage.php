@@ -20,11 +20,9 @@ class ApiQueryReptxThxPage extends ApiQueryBase {
             $this->dieUsage('pageTitle parameter is not set', 'noPageTitle');
         }
 
-        
+
         $fitness = $page->getFitness();
-//        $cred = $page->getCreditValue();
         $lastFitUpd = $page->getLastFitnessUpdateTimestamp();
-//        $lastCredUpd = $page->getCredLastUpdatedTimestamp();
 
         $r = array(
             'fitness' => $fitness === null ? 0 : $fitness,
@@ -59,7 +57,7 @@ class ApiQueryReptxThxPage extends ApiQueryBase {
 
     private function getPageById($id, $params) {
         $mediawikiPage = Title::newFromId($id);
-//        error_log($mediawikiPage);
+
         if ($mediawikiPage !== null) {
             $reptxthxPage = ReptxThxPage::newFromId($id);
 

@@ -23,6 +23,8 @@ $wgExtensionCredits['other'][] = array(
 
 $dir = __DIR__;
 
+$wgExtensionMessagesFiles['ExampleExtension'] = __DIR__ . '/reptxThx.i18n.magic.php';
+
 // Register special page
 $wgSpecialPages['ReptxThx'] = 'SpecialReptxThx';
 
@@ -61,13 +63,13 @@ $wgHooks['PageContentSaveComplete'][] = 'ReptxThxHooks::onPageContentSaveComplet
 $wgHooks['EchoEventInsertComplete'][] = 'ReptxThxHooks::onEchoEventInsertComplete';
 
 // Extension initialization
-//$wgExtensionFunctions[] = 'ReptxThxHooks::initExtension';
+$wgExtensionFunctions[] = 'ReptxThxHooks::initExtension';
 
 $wgJobClasses['executeReptxThxAlgorithm'] = 'ReptxThxAlgorithmJob';
 
 $wgAPIListModules['reptxthxuser'] = 'ApiQueryReptxThxUser';
 $wgAPIListModules['reptxthxpage'] = 'ApiQueryReptxThxPage';
-//$wgHooks['ParserFirstCallInit'][] = 'ReptxThxHooks::onParserFirstCallInit';
+$wgHooks['ParserFirstCallInit'][] = 'ReptxThxHooks::onParserSetup';
 //$wgHooks['MagicWordwgVariableIDs'][] = 'ReptxThxHooks::onRegisterMagicWords';
 //$wgHooks['ParserGetVariableValueSwitch'][] = 'ReptxThxHooks::onParserGetVariableValueSwitch';
 //$wgHooks['LoadExtensionSchemaUpdates'][] = 'ReptxThxHooks::onLoadExtensionSchemaUpdates';
@@ -85,3 +87,5 @@ $phiP = 1;
 $roF = 0.5;
 $roR = 1;
 $lambda = 1;
+
+

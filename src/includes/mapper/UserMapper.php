@@ -1,21 +1,12 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 class UserMapper extends AbstractMapper {
 
     /**
-     * Insert an event record
-     *
-     * @param EchoEvent
-     * @return int|bool
+     * 
+     * @param ReptxThxUser $user
+     * @return boolean
      */
-    const USER_TABLE_NAME = 'reptxThx_user';
-
     public function insert(ReptxThxUser $user) {
         $dbw = $this->dbFactory->getForWrite();
 
@@ -37,12 +28,9 @@ class UserMapper extends AbstractMapper {
     }
 
     /**
-     * Create an EchoEvent by id
-     *
-     * @param int
-     * @param boolean
-     * @return EchoEvent
-     * @throws MWException
+     * gets a user by its userId
+     * @param type $id
+     * @return type
      */
     public function getByUserId($id) {
 
@@ -53,6 +41,12 @@ class UserMapper extends AbstractMapper {
         return ReptxThxUser::newFromRow($row);
     }
 
+    /**
+     * Gets an array with $limit number of users
+     * @param type $limit
+     * @param type $last
+     * @return array
+     */
     public function getUsersArray($limit, $last) {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -66,10 +60,10 @@ class UserMapper extends AbstractMapper {
         return $data;
     }
 
-    public function getWikiUsersArray($limit, $continuation) {
-        
-    }
-
+    /**
+     * Returns the number of wiki users
+     * @return type
+     */
     public function getWikiUsersNumber() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('user', array('numUsers' => 'COUNT(*)'), '', __METHOD__);
@@ -77,6 +71,11 @@ class UserMapper extends AbstractMapper {
         return $res->numUsers;
     }
 
+    /**
+     * Returns an array with all the users not inserted into
+     * reptxths tables.
+     * @return array
+     */
     public function getNewUsers() {
         $data = array();
         $db = $this->dbFactory->getForRead();
@@ -91,6 +90,12 @@ class UserMapper extends AbstractMapper {
         return $data;
     }
 
+    /**
+     * Updates temporary reputation value 
+     * @param type $userId
+     * @param type $value
+     * @return type
+     */
     public function updateTempRepValue($userId, $value) {
 
         $db = $this->dbFactory->getForWrite();
@@ -100,6 +105,13 @@ class UserMapper extends AbstractMapper {
         return $res;
     }
 
+    /**
+     * Updates reputation value
+     * @param type $userId
+     * @param type $repVal
+     * @param type $timestamp
+     * @return type
+     */
     public function updateRepValue($userId, $repVal, $timestamp) {
         $db = $this->dbFactory->getForWrite();
 
@@ -108,6 +120,12 @@ class UserMapper extends AbstractMapper {
         return $res;
     }
 
+    /**
+     * Updates temporary credit value 
+     * @param type $userId
+     * @param type $value
+     * @return type
+     */
     public function updateTempCredValue($userId, $value) {
         $db = $this->dbFactory->getForWrite();
 
@@ -116,6 +134,13 @@ class UserMapper extends AbstractMapper {
         return $res;
     }
 
+    /**
+     * Updates reputation value 
+     * @param type $userId
+     * @param type $value
+     * @param type $timestamp
+     * @return type
+     */
     public function updateCredValue($userId, $value, $timestamp) {
         $db = $this->dbFactory->getForWrite();
 
@@ -124,6 +149,10 @@ class UserMapper extends AbstractMapper {
         return $res;
     }
 
+    /**
+     * Returns the sum of the squered reputation value
+     * @return type
+     */
     public function getRepSqrSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_user', array('sqrSum' => 'SUM(user_temp_rep_value * user_temp_rep_value)'), '', __METHOD__);
@@ -131,6 +160,10 @@ class UserMapper extends AbstractMapper {
         return $res->sqrSum;
     }
 
+    /**
+     * Returns sum of the squered credit value
+     * @return type
+     */
     public function getCredSqrSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_user', array('sqrSum' => 'SUM(user_temp_cred_value * user_temp_cred_value)'), '', __METHOD__);
@@ -138,6 +171,10 @@ class UserMapper extends AbstractMapper {
         return $res->sqrSum;
     }
 
+    /**
+     * Returns reputation average
+     * @return type
+     */
     public function getReputationAvg() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_user', array('repAvg' => 'avg(user_temp_rep_value)'), '', __METHOD__);
@@ -145,6 +182,10 @@ class UserMapper extends AbstractMapper {
         return $res->repAvg;
     }
 
+    /**
+     * Returns credit average
+     * @return type
+     */
     public function getCreditAvg() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_user', array('credAvg' => 'avg(user_temp_cred_value)'), '', __METHOD__);
@@ -152,6 +193,10 @@ class UserMapper extends AbstractMapper {
         return $res->credAvg;
     }
 
+    /**
+     * Returns reputation sum
+     * @return type
+     */
     public function getReputationSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_user', array('repSum' => 'sum(user_temp_rep_value)'), '', __METHOD__);
@@ -159,6 +204,10 @@ class UserMapper extends AbstractMapper {
         return $res->repSum;
     }
 
+    /**
+     * Returns credit sum
+     * @return type
+     */
     public function getCreditSum() {
         $db = $this->dbFactory->getForRead();
         $res = $db->selectRow('reptxthx_user', array('credSum' => 'avg(user_temp_cred_value)'), '', __METHOD__);
