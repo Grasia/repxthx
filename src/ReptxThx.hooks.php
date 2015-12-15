@@ -18,7 +18,7 @@ class ReptxThxHooks {
      */
     public static function initExtension() {
 
-//        print_r("gol");
+
     }
 
     public static function onLoadExtensionSchemaUpdates($updater) {
