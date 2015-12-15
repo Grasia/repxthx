@@ -66,6 +66,7 @@ Adding these while editing a page prints information for users.
 
 - Printing user reputation: {{#rept: <user_name>}}
 - Printing user credit: {{#cred: <user_name>}}
+
 ## License
 
 GNU GENERAL PUBLIC LICENSE Version 3
